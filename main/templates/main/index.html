@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Main
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/main/index.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Content</h1>
+
+<div id="start-project">
+    <div id="open-project">
+        <button id="start-button" type="submit"> Старт </button>
+    </div>
+    <div id="output-project">
+
+    </div>
+</div>
+{% endblock %}
