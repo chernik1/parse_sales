@@ -17,6 +17,8 @@ Main
 <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">
 <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 {% endblock %}
 
 {% block css %}
@@ -34,4 +36,25 @@ Main
 
     </div>
 </div>
+<table id="table">
+<!--    {% for item in table %}-->
+<!--    <tr>-->
+<!--        <td data-id="{{ item.id }}" data-symbol="{{ item.symbol }}">{{ item.symbol }}</td>-->
+<!--        <td data-numbers_of_legs="{{ item.numbers_of_legs }}">{{ item.numbers_of_legs }}</td>-->
+<!--        <td data-combo_price="{{ item.combo_price }}">{{ item.combo_price }}</td>-->
+<!--        <td data-legs_details="{{ item.legs_details }}">{{ item.legs_details }}</td>-->
+<!--        <td data-account="{{ item.account }}">{{ item.account }}</td>-->
+<!--    </tr>-->
+<!--    {% endfor %}-->
+    <tr>
+        <td>12</td>
+        <td>2</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>2</td>
+        <td>3</td>
+    </tr>
+</table>
 {% endblock %}
