@@ -13,8 +13,8 @@ def check_page(page: Page) -> tuple[Page, list]:
     soup = BeautifulSoup(html_content, 'html.parser')
     a_href_page_find = soup.find(id='fra:auctionList:tbody').find_all('a')
 
-    #if len(a_href_page_find) > 10:
-    element_id = a_href_page_find[15]['id'].replace(':', '\\:').replace('\u0000', '')
+    #if len(a_href_page_find) == 20:
+    element_id = a_href_page_find[19]['id'].replace(':', '\\:').replace('\u0000', '')
     page.wait_for_selector(f'#{element_id}', state='detached')
 
     html_content = page.content()
