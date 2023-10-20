@@ -13,9 +13,9 @@ def check_page(page: Page) -> tuple[Page, list]:
     soup = BeautifulSoup(html_content, 'html.parser')
     a_href_page_find = soup.find(id='fra:auctionList:tbody').find_all('a')
 
-    if len(a_href_page_find) > 10:
-        element_id = a_href_page_find[0]['id'].replace(':', '\\:').replace('\u0000', '')
-        page.wait_for_selector(f'#{element_id}', state='attached')
+    #if len(a_href_page_find) > 10:
+    element_id = a_href_page_find[15]['id'].replace(':', '\\:').replace('\u0000', '')
+    page.wait_for_selector(f'#{element_id}', state='detached')
 
     html_content = page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -49,11 +49,12 @@ def run(playwright: Playwright, keyword: str) -> None:
 
     page, a_href_page_find = check_page(page)
 
-    for a_href in a_href_page_find:
-        element_id = a_href['id'].replace(':', '\\:').replace('\u0000', '')
-        page.query_selector(f'#{element_id}').click()
-        page.wait_for_selector(f'#{element_id}', state='detached')
-        page.go_back()
+    if len(a_href_page_find) > 0:
+        for a_href in a_href_page_find:
+            element_id = a_href['id'].replace(':', '\\:').replace('\u0000', '')
+            page.query_selector(f'#{element_id}').click()
+            page.wait_for_selector(f'#{element_id}', state='detached')
+            page.go_back()
 
 
     # ---------------------
