@@ -2,7 +2,7 @@ import datetime
 
 
 def get_keywords() -> list[str]:
-    with open('keywords.txt', 'rt', encoding='utf-8') as f:
+    with open('C:\\Users\\Максим\\Desktop\\project\\father_help\\parser\\keyword_test', 'rt', encoding='utf-8') as f:
         return [k.strip() for k in f]
 
 def date_date() -> tuple[str, str]:

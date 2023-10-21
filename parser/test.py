@@ -23,8 +23,6 @@ def check_page(page: Page) -> tuple[Page, list]:
 
     return (page, a_href_page_find)
 
-def parse_a_href(a_href: str) -> None:
-    pass
 
 def step(page: Page, keyword: str) -> Page:
 
@@ -40,6 +38,24 @@ def step(page: Page, keyword: str) -> Page:
 
     return page
 
+def parse_a_href(page: Page) -> Page:
+
+    html_content = page.content()
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    table = soup.find('#ice-skin-rime').find_all('table', class_='icePnlGrd panelContentFill labelContent')
+
+    table_tbody_tr_invite = table[0].find_all('tr')
+    register = table_tbody_tr_invite[0]
+    name = table_tbody_tr_invite[7]
+
+    table_tbody_tr_info = soup.find('table', class_='icePnlGrd panelContentFill labelContent').find_all('tr')
+    print()
+
+
+
+
+
 def run(playwright: Playwright, keyword: str) -> None:
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
@@ -53,6 +69,7 @@ def run(playwright: Playwright, keyword: str) -> None:
         element_id = a_href['id'].replace(':', '\\:').replace('\u0000', '')
         page.query_selector(f'#{element_id}').click()
         page.wait_for_selector(f'#{element_id}', state='detached')
+        page = parse_a_href(page)
         page.go_back()
 
 
