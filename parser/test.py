@@ -32,8 +32,21 @@ def check_page(page: Page) -> tuple[Page, list]:
     return (page, [])
 
 
-def parse_a_href(a_href: str) -> None:
-    pass
+def parse_a_href(page: Page) -> Page:
+
+    html_content = page.content()
+    soup = BeautifulSoup(html_content, 'html.parser')
+    with open('1.html', 'w', encoding='utf-8') as f:
+        f.write(str(soup))
+    register = soup(text='Регистрационный номер')
+    register_id = register[0].find_parent('table')
+    if register is None:
+        return page
+    print()
+
+
+
+
 
 def step(page: Page, keyword: str) -> Page:
 
@@ -62,7 +75,7 @@ def run(playwright: Playwright, keyword: str) -> None:
         for a_href in a_href_page_find:
             element_id = a_href['id'].replace(':', '\\:').replace('\u0000', '')
             page.query_selector(f'#{element_id}').click()
-
+            parse_a_href(page)
             context.close()
             browser.close()
 
