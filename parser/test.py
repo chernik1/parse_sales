@@ -11,17 +11,26 @@ def check_page(page: Page) -> tuple[Page, list]:
 
     html_content = page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
-    a_href_page_find = soup.find(id='fra:auctionList:tbody').find_all('a')
+    a_href_page_find = soup.find(id='fra:auctionList:tbody')
+    if a_href_page_find is None:
+        return (page, [])
+    a_href_page_find = a_href_page_find.find_all('a')
 
-    #if len(a_href_page_find) == 20:
-    element_id = a_href_page_find[19]['id'].replace(':', '\\:').replace('\u0000', '')
-    page.wait_for_selector(f'#{element_id}', state='detached')
+    if len(a_href_page_find) == 20:
+        element_id = a_href_page_find[18]['id'].replace(':', '\\:').replace('\u0000', '')
+        page.wait_for_selector(f'#{element_id}', state='detached')
 
-    html_content = page.content()
-    soup = BeautifulSoup(html_content, 'html.parser')
-    a_href_page_find = soup.find(id='fra:auctionList:tbody').find_all('a')
+        html_content = page.content()
+        soup = BeautifulSoup(html_content, 'html.parser')
+        a_href_page_find = soup.find(id='fra:auctionList:tbody')
+        if a_href_page_find is None:
+            return (page, [])
+        a_href_page_find = a_href_page_find.find_all('a')
 
-    return (page, a_href_page_find)
+        return (page, a_href_page_find)
+
+    return (page, [])
+
 
 def parse_a_href(a_href: str) -> None:
     pass
@@ -53,9 +62,14 @@ def run(playwright: Playwright, keyword: str) -> None:
         for a_href in a_href_page_find:
             element_id = a_href['id'].replace(':', '\\:').replace('\u0000', '')
             page.query_selector(f'#{element_id}').click()
-            page.wait_for_selector(f'#{element_id}', state='detached')
-            page.go_back()
 
+            context.close()
+            browser.close()
+
+            browser = playwright.chromium.launch(headless=False)
+            context = browser.new_context()
+            page = context.new_page()
+            page = step(page, keyword)
 
     # ---------------------
     context.close()
