@@ -39,8 +39,8 @@ def parse_a_href(page: Page) -> tuple[Page, list]:
     html_content = page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    with open('1.html', 'w', encoding='utf-8') as f:
-        f.write(str(soup))
+    # with open('1.html', 'w', encoding='utf-8') as f:
+    #     f.write(str(soup))
 
     register = soup(text='Регистрационный номер')
     register_tr = register[0].find_parent('tr')
