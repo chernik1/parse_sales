@@ -30,34 +30,21 @@ Main
 
 <div id="start-project">
     <div id="open-project">
-        <button id="start-button" type="submit"> Старт </button>
-    </div>
-    <div id="output-project">
-
+        <button id="start-button" type="submit">Старт</button>
     </div>
 </div>
+
 <table id="table">
-<!--    {% for item in table %}-->
-<!--    <tr>-->
-<!--        <td data-id="{{ item.id }}" data-symbol="{{ item.symbol }}">{{ item.symbol }}</td>-->
-<!--        <td data-numbers_of_legs="{{ item.numbers_of_legs }}">{{ item.numbers_of_legs }}</td>-->
-<!--        <td data-combo_price="{{ item.combo_price }}">{{ item.combo_price }}</td>-->
-<!--        <td data-legs_details="{{ item.legs_details }}">{{ item.legs_details }}</td>-->
-<!--        <td data-account="{{ item.account }}">{{ item.account }}</td>-->
-<!--    </tr>-->
-<!--    {% endfor %}-->
+    {% for item in parser %}
     <tr>
-        <td>12</td>
-        <td>2</td>
-        <td>3</td>
+        <td data-keyword="{{ item.keyword }}">{{ item.keyword }}</td>
+        <td data-id_purchase="{{ item.id_purchase }}">{{ item.id_purchase }}</td>
+        <td data-name_company="{{ item.name_company }}">{{ item.name_company }}</td>
+        <td data-name_purchase="{{ item.name_purchase }}">{{ item.name_purchase }}</td>
+        <td data-date="{{ item.date }}">{{ item.date }}</td>
+        <td data-price="{{ item.price }}">{{ item.price }}</td>
     </tr>
-    <tr>
-        <td>12</td>
-        <td>2</td>
-        <td>3</td>
-    </tr>
+    {% endfor %}
 </table>
 
-<h1 id="loading-message">Подождите, идет выполнение программы...</h1>
-<p id="result"></p>
 {% endblock %}

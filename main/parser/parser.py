@@ -2,7 +2,6 @@ from playwright.sync_api import Playwright, Page, sync_playwright
 from .settings import today, yesterday, keywords
 from bs4 import BeautifulSoup
 from time import sleep
-import asyncio
 from pprint import pprint
 
 list_of_keywords = []
