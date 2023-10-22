@@ -1,12 +1,11 @@
 from playwright.sync_api import Playwright, Page, sync_playwright
-from settings import today, yesterday, keywords
+from .settings import today, yesterday, keywords
 from bs4 import BeautifulSoup
 from time import sleep
 import asyncio
 from pprint import pprint
 
 list_of_keywords = []
-
 
 def check_page(page: Page) -> tuple[Page, list]:
 
@@ -94,6 +93,7 @@ def step(page: Page, keyword: str) -> Page:
     return page
 
 def run(playwright: Playwright, keyword: str) -> None:
+    global list_of_keywords
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
@@ -129,15 +129,17 @@ def run(playwright: Playwright, keyword: str) -> None:
             page = step(page, keyword)
 
     list_of_keywords.append(keyword_dict)
-
     # ---------------------
     context.close()
     browser.close()
 
+def run_programm():
+    for keyword in keywords:
+        with sync_playwright() as playwright:
+            run(playwright, keyword)
 
-for keyword in keywords:
-    with sync_playwright() as playwright:
-        run(playwright, keyword)
+    pprint(list_of_keywords)
+    return list_of_keywords
 
-pprint(list_of_keywords)
+
 
