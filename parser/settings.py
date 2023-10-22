@@ -7,7 +7,7 @@ def get_keywords() -> list[str]:
 
 def date_date() -> tuple[str, str]:
     today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=1)
+    yesterday = today - datetime.timedelta(days=2)
     formatted_today = today.strftime("%d.%m.%Y")
     formatted_yesterday = yesterday.strftime("%d.%m.%Y")
     return (formatted_today, formatted_yesterday)
