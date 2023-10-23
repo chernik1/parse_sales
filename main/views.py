@@ -3,8 +3,13 @@ from django.http import HttpResponse, JsonResponse
 from .parser.parser import run_programm
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser
+import uuid
+
 # Create your views here.
 
+def generate_unique_id():
+    print(uuid.uuid4())
+    return str(uuid.uuid4())
 
 @csrf_exempt
 def form_data(request):
@@ -23,7 +28,8 @@ def form_data(request):
                 new_name_purchase = element[new_keyword][digit][3]
                 new_price = element[new_keyword][digit][4]
                 new_payer_number = element[new_keyword][digit][5]
-                if not Parser.objects.filter(id=new_id_purchase).exists():
+                new_id = generate_unique_id()
+                if not Parser.objects.filter(id=new_id).exists():
                     Parser.objects.create(
                                           keyword=new_keyword,
                                           id_purchase=new_id_purchase,
@@ -32,6 +38,7 @@ def form_data(request):
                                           date=new_date,
                                           price=new_price,
                                           payer_number=new_payer_number,
+                                          id=new_id,
                                           )
                     parser_for_json.append({
                                  'keyword': new_keyword,
@@ -44,9 +51,15 @@ def form_data(request):
                                 })
         else:
             if not Parser.objects.filter(keyword=new_keyword).exists():
+                new_id = generate_unique_id()
                 Parser.objects.create(
                     keyword=new_keyword,
+                    id=new_id,
                 )
+                parser_for_json.append({
+                    'keyword': new_keyword,
+                    'id': new_id,
+                })
     context = {
         'parser': parser_for_json,
     }
