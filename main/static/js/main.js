@@ -39,6 +39,11 @@ $(document).ready(function() {
                 priceCell.textContent = item.price;
                 row.appendChild(priceCell);
 
+                let payerNumberCell = document.createElement('td');
+                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
+                payerNumberCell.textContent = item.payer_number;
+                row.appendChild(payerNumberCell);
+
                 $('#table').append(row);
             });
         },
@@ -58,6 +63,7 @@ $(document).ready(function() {
             {title: "Предмет"},
             {title: "Дата"},
             {title: "Цена"},
+            {title: 'УНП'},
         ],
         dom: 'Bfrtip',
         select: {
@@ -124,6 +130,11 @@ function deleteFunction(id_list) {
                 priceCell.setAttribute('data-price', item.price);
                 priceCell.textContent = item.price;
                 row.appendChild(priceCell);
+
+                let payerNumberCell = document.createElement('td');
+                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
+                payerNumberCell.textContent = item.payer_number;
+                row.appendChild(payerNumberCell);
 
                 $('#table').append(row);
             });

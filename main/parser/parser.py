@@ -3,6 +3,7 @@ from .settings import today, yesterday, keywords
 from bs4 import BeautifulSoup
 from time import sleep
 from pprint import pprint
+#from settings import today, yesterday, keywords
 
 list_of_keywords = []
 
@@ -70,6 +71,12 @@ def parse_a_href(page: Page) -> tuple[Page, list]:
     price_text = price_all_span[1].text
     price_text = price_text.replace("\xa0", "").replace("\\xa", "")
     list_of_objects.append(price_text)
+
+    payer_account_num = soup(text='УНП')
+    payer_account_num_tr = payer_account_num[1].find_parent('tr')
+    payer_account_num_all_span = payer_account_num_tr.find_all('span')
+    payer_account_num_text = payer_account_num_all_span[1].text
+    list_of_objects.append(payer_account_num_text)
 
     return (page, list_of_objects)
 
@@ -140,5 +147,6 @@ def run_programm():
     pprint(list_of_keywords)
     return list_of_keywords
 
+#run_programm()
 
 

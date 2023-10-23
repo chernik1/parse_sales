@@ -14,28 +14,39 @@ def form_data(request):
 
     for element in result:
         new_keyword = list(element.keys())[0]
-        new_id_purchase = element[new_keyword][0][0]
-        new_name_company = element[new_keyword][0][1]
-        new_date = element[new_keyword][0][2]
-        new_name_purchase = element[new_keyword][0][3]
-        new_price = element[new_keyword][0][4]
-        if not Parser.objects.filter(id=new_id_purchase).exists():
-            Parser.objects.create(
-                                  keyword=new_keyword,
-                                  id_purchase=new_id_purchase,
-                                  name_company=new_name_company,
-                                  name_purchase=new_name_purchase,
-                                  date=new_date,
-                                  price=new_price,
-                                  )
-            parser_for_json.append({
-                         'keyword': new_keyword,
-                         'id_purchase': new_id_purchase,
-                         'name_company': new_name_company,
-                         'name_purchase': new_name_purchase,
-                         'date': new_date,
-                         'price': new_price,
-                          })
+        if not len(element[new_keyword]) == 0:
+            print(element[new_keyword])
+            for digit in range(len(element[new_keyword])):
+                new_id_purchase = element[new_keyword][digit][0]
+                new_name_company = element[new_keyword][digit][1]
+                new_date = element[new_keyword][digit][2]
+                new_name_purchase = element[new_keyword][digit][3]
+                new_price = element[new_keyword][digit][4]
+                new_payer_number = element[new_keyword][digit][5]
+                if not Parser.objects.filter(id=new_id_purchase).exists():
+                    Parser.objects.create(
+                                          keyword=new_keyword,
+                                          id_purchase=new_id_purchase,
+                                          name_company=new_name_company,
+                                          name_purchase=new_name_purchase,
+                                          date=new_date,
+                                          price=new_price,
+                                          payer_number=new_payer_number,
+                                          )
+                    parser_for_json.append({
+                                 'keyword': new_keyword,
+                                 'id_purchase': new_id_purchase,
+                                 'name_company': new_name_company,
+                                 'name_purchase': new_name_purchase,
+                                 'date': new_date,
+                                 'price': new_price,
+                                 'payer_number': new_payer_number
+                                })
+        else:
+            if not Parser.objects.filter(keyword=new_keyword).exists():
+                Parser.objects.create(
+                    keyword=new_keyword,
+                )
     context = {
         'parser': parser_for_json,
     }
@@ -60,6 +71,7 @@ def delete(request):
                 'name_purchase':  item.name_purchase,
                 'date':  item.date,
                 'price':  item.price,
+                'payer_number':  item.payer_number,
             })
         context = {
             'table': table_for_json,
