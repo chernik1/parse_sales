@@ -53,7 +53,7 @@ $(document).ready(function() {
 
     let table;
     table = $('#table').DataTable({
-        "pageLength": 10,
+        "pageLength": 100,
         "order": [[0, 'asc']],
         "ordering": true,
         columns: [
