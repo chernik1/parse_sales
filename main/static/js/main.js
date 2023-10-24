@@ -87,9 +87,7 @@ $(document).ready(function() {
             }
         }],
     });
-});
-
-function deleteFunction(id_list) {
+    function deleteFunction(id_list) {
     $.ajax({
         url: "/delete/",
         type: "POST",
@@ -98,6 +96,7 @@ function deleteFunction(id_list) {
         },
         dataType: "json",
         success: function(response) {
+            table.clear();
             response.table.forEach(function(item) {
                 let row = document.createElement('tr');
 
@@ -136,9 +135,12 @@ function deleteFunction(id_list) {
                 payerNumberCell.textContent = item.payer_number;
                 row.appendChild(payerNumberCell);
 
-                $('#table').append(row);
+                table.row.add(row);
             });
+            table.draw();
         }
     });
 }
+
+});
 
