@@ -6,7 +6,9 @@ $(document).ready(function() {
         url: 'data/',
         type: 'GET',
         success: function(response) {
+            table.clear();
             response.table.forEach(function(item) {
+                if (item.name_company == underfined){}
                 let row = document.createElement('tr');
 
                 let keywordCell = document.createElement('td');
@@ -44,8 +46,9 @@ $(document).ready(function() {
                 payerNumberCell.textContent = item.payer_number;
                 row.appendChild(payerNumberCell);
 
-                $('#table').append(row);
+                table.row.add(row);
             });
+           table.draw();
         },
     });
 });
@@ -143,4 +146,9 @@ $(document).ready(function() {
 }
 
 });
+
+
+
+
+
 
