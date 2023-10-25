@@ -83,6 +83,10 @@ def delete(request):
         table = Parser.objects.all()
         table_for_json = []
         for item in table:
+
+            if ParserDelete.objects.filter(id_purchase=item.name_purchase).exists():
+                continue
+
             table_for_json.append({
                 'keyword': item.keyword,
                 'id_purchase':  item.id_purchase,
