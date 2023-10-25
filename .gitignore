@@ -1,2 +1,4 @@
 /venv
 db.sqlite3
+parser/keywords.txt
+parser/keywords_test.txt
