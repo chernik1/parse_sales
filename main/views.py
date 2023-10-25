@@ -55,8 +55,6 @@ def form_data(request):
                                  'payer_number': new_payer_number
                                 })
 
-                    id_purchase_check.append(new_id_purchase)
-
         else:
             if not Parser.objects.filter(keyword=new_keyword).exists():
                 new_id = generate_unique_id()

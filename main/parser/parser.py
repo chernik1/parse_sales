@@ -38,9 +38,6 @@ def parse_a_href(page: Page) -> tuple[Page, list]:
     html_content = page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    # with open('1.html', 'w', encoding='utf-8') as f:
-    #     f.write(str(soup))
-
     register = soup(text='Регистрационный номер')
     register_tr = register[0].find_parent('tr')
     register_all_span = register_tr.find_all('span')
@@ -100,7 +97,7 @@ def step(page: Page, keyword: str) -> Page:
 
 def run(playwright: Playwright, keyword: str) -> None:
     global list_of_keywords
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=True)
     context = browser.new_context()
     page = context.new_page()
     page = step(page, keyword)
@@ -129,7 +126,7 @@ def run(playwright: Playwright, keyword: str) -> None:
             context.close()
             browser.close()
 
-            browser = playwright.chromium.launch(headless=False)
+            browser = playwright.chromium.launch(headless=True)
             context = browser.new_context()
             page = context.new_page()
             page = step(page, keyword)
