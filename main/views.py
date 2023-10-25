@@ -67,7 +67,7 @@ def form_data(request):
                     'id': new_id,
                 })
     context = {
-        'parser': parser_for_json,
+        'table': parser_for_json,
     }
 
     return JsonResponse(context, safe=False)
