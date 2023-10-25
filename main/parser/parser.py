@@ -140,6 +140,8 @@ def run(playwright: Playwright, keyword: str) -> None:
     browser.close()
 
 def run_programm():
+    global list_of_keywords
+    list_of_keywords = []
     for keyword in keywords:
         with sync_playwright() as playwright:
             run(playwright, keyword)

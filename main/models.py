@@ -2,6 +2,13 @@ from django.db import models
 
 # Create your models here.
 
+class ParserDelete(models.Model):
+
+    id_purchase = models.CharField(max_length=10000, default='')
+
+    def __str__(self):
+        return f'{self.id_purchase}'
+
 class Parser(models.Model):
 
     id = models.CharField(max_length=100, primary_key=True)

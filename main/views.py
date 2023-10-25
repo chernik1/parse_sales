@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .parser.parser import run_programm
 from django.views.decorators.csrf import csrf_exempt
-from .models import Parser
+from .models import Parser, ParserDelete
 import uuid
 
 # Create your views here.
@@ -29,6 +29,10 @@ def form_data(request):
                 new_price = element[new_keyword][digit][4]
                 new_payer_number = element[new_keyword][digit][5]
                 new_id = generate_unique_id()
+
+                if ParserDelete.objects.filter(id_purchase=new_id_purchase).exists():
+                    continue
+
                 if not Parser.objects.filter(id=new_id).exists():
                     Parser.objects.create(
                                           keyword=new_keyword,
@@ -40,6 +44,7 @@ def form_data(request):
                                           payer_number=new_payer_number,
                                           id=new_id,
                                           )
+
                     parser_for_json.append({
                                  'keyword': new_keyword,
                                  'id_purchase': new_id_purchase,
@@ -49,6 +54,9 @@ def form_data(request):
                                  'price': new_price,
                                  'payer_number': new_payer_number
                                 })
+
+                    id_purchase_check.append(new_id_purchase)
+
         else:
             if not Parser.objects.filter(keyword=new_keyword).exists():
                 new_id = generate_unique_id()
@@ -90,6 +98,16 @@ def delete(request):
             'table': table_for_json,
         }
         return JsonResponse(context, safe=False)
+    redirect('/')
+
+@csrf_exempt
+def delete_all(request):
+    if request.method == 'GET':
+        parser_all = Parser.objects.all()
+        for item in parser_all:
+            item.delete()
+        return JsonResponse('ok', safe=False)
+    return redirect('/')
 
 def index(request):
     parser = Parser.objects.all()
@@ -97,3 +115,33 @@ def index(request):
         'parser': parser,
     }
     return render(request, 'main/index.html', context)
+
+@csrf_exempt
+def complete(request):
+    if request.method == 'POST':
+        list_id = request.POST.getlist('id_list[]')
+        list_id = list(filter(None, list_id))
+        for id_item in list_id:
+            queryset = Parser.objects.filter(id_purchase=id_item)
+            add_delete = ParserDelete.objects.create(
+                id_purchase=id_item,
+            )
+            item = queryset.first()
+            item.delete()
+        table = Parser.objects.all()
+        table_for_json = []
+        for item in table:
+            table_for_json.append({
+                'keyword': item.keyword,
+                'id_purchase': item.id_purchase,
+                'name_company': item.name_company,
+                'name_purchase': item.name_purchase,
+                'date': item.date,
+                'price': item.price,
+                'payer_number': item.payer_number,
+            })
+        context = {
+            'table': table_for_json,
+        }
+        return JsonResponse(context, safe=False)
+    redirect('/')

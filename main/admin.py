@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Parser
+from .models import Parser, ParserDelete
 # Register your models here.
 
 @admin.register(Parser)
@@ -11,3 +11,7 @@ class ParserAdmin(admin.ModelAdmin):
     @admin.action(description='Delete all selected items')
     def delete_parser_data(self, request, queryset):
         queryset.delete()
+
+@admin.register(ParserDelete)
+class ParserDeleteAdmin(admin.ModelAdmin):
+    list_display = ['id_purchase']
