@@ -62,10 +62,10 @@ $(document).ready(function() {
         {title: "Keyword"},
         {title: "Регистрационный номер"},
         {title: "Имя компании"},
+        {title: 'УНП'},
         {title: "Предмет"},
         {title: "Дата"},
         {title: "Цена"},
-        {title: 'УНП'},
     ],
     dom: 'Bfrtip',
     select: {
