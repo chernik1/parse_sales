@@ -6,7 +6,7 @@ file_path = os.path.join(os.path.dirname(__file__), 'keywords.txt')
 #C:\Users\maks\Desktop\father\father_help\main\parsers\keywords_test
 
 def get_keywords() -> list[str]:
-    with open('C:\\Users\\maks\\Desktop\\father\\father_help\\main\\parsers\\keywords_test', 'rt', encoding='utf-8') as f:
+    with open('C:\\Users\\maks\\Desktop\father\father_help\\main\\parsers\\BUTB\\keywords_test', 'rt', encoding='utf-8') as f:
         return [k.strip() for k in f]
 
 def date_date() -> tuple[str, str]:
