@@ -96,7 +96,7 @@ def step(page: Page, keyword: str) -> Page:
 
 def run(playwright: Playwright, keyword: str) -> None:
     global list_of_keywords
-    browser = playwright.chromium.launch(headless=True)
+    browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
     page = step(page, keyword)
@@ -125,7 +125,7 @@ def run(playwright: Playwright, keyword: str) -> None:
             context.close()
             browser.close()
 
-            browser = playwright.chromium.launch(headless=True)
+            browser = playwright.chromium.launch(headless=False)
             context = browser.new_context()
             page = context.new_page()
             page = step(page, keyword)

@@ -1,7 +1,7 @@
 import datetime
 import os
 
-file_path = os.path.join(os.path.dirname(__file__), 'keywords_test')
+file_path = os.path.join(os.path.dirname(__file__), 'keywords.txt')
 
 def get_keywords() -> list[str]:
     with open(file_path, 'rt', encoding='utf-8') as f:
