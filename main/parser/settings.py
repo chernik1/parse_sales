@@ -3,9 +3,10 @@ import os
 
 file_path = os.path.join(os.path.dirname(__file__), 'keywords.txt')
 
+#C:\Users\maks\Desktop\father\father_help\main\parser\keywords_test
 
 def get_keywords() -> list[str]:
-    with open(file_path, 'rt', encoding='utf-8') as f:
+    with open('C:\\Users\\maks\\Desktop\\father\\father_help\\main\\parser\\keywords_test', 'rt', encoding='utf-8') as f:
         return [k.strip() for k in f]
 
 def date_date() -> tuple[str, str]:

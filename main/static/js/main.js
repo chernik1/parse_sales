@@ -26,8 +26,6 @@ $(document).ready(function() {
             text: 'Delete',
             className: 'button-table-delete',
             action: function (e, dt, node, config) {
-                let dataTable;
-                dataTable = document.querySelectorAll('#table');
                 let selectedIds = [];
                 let selectedRows = dt.rows({selected: true}).nodes();
                 selectedRows.each(function(row) {
@@ -35,7 +33,7 @@ $(document).ready(function() {
                     let rowId = tdElement.getAttribute('data-id_purchase');
                     selectedIds.push(rowId);
                 });
-                deleteFunction(selectedIds, dataTable);
+                deleteFunction(selectedIds);
             }
         },
         {
@@ -49,8 +47,7 @@ $(document).ready(function() {
             text: 'Завершить',
             className: 'button-table-complete',
             action: function (e, dt, node, config){
-                let dataTable;
-                dataTable = document.querySelectorAll('#table');
+
                 let selectedIds = [];
                 let selectedRows = dt.rows({selected: true}).nodes();
                 selectedRows.each(function(row) {
@@ -58,19 +55,19 @@ $(document).ready(function() {
                     let rowId = tdElement.getAttribute('data-id_purchase');
                     selectedIds.push(rowId);
                 });
-                completeFunction(selectedIds, dataTable);
+                completeFunction(selectedIds);
+
             }
         }
     ]
 });
 
-function completeFunction(id_list, dataTable){
+function completeFunction(id_list){
    $.ajax({
         url: "/complete/",
         type: "POST",
         data: {
             id_list: id_list,
-            data_table: dataTable,
         },
         dataType: "json",
         success: function(response) {
@@ -120,17 +117,17 @@ function completeFunction(id_list, dataTable){
     });
 };
 
-    function deleteFunction(id_list, dataTable) {
+function deleteFunction(id_list) {
     $.ajax({
         url: "/delete/",
         type: "POST",
         data: {
             id_list: id_list,
-            data_table: dataTable,
         },
         dataType: "json",
         success: function(response) {
-            table.clear();
+            table.clear().draw();
+
             response.table.forEach(function(item) {
                 let row = document.createElement('tr');
 
@@ -169,10 +166,9 @@ function completeFunction(id_list, dataTable){
                 payerNumberCell.textContent = item.payer_number;
                 row.appendChild(payerNumberCell);
 
-                table.row.add(row);
+                table.row.add(row).draw();
             });
-            table.draw();
-        }
+        },
     });
 }
 
@@ -190,14 +186,9 @@ function deleteAllFunction() {
 
 
 document.getElementById('start-button').addEventListener('click', function() {
-    let dataTable = document.getElementById('table');
     $.ajax({
         url: 'data/',
-        type: 'POST',
-        data: {
-            data_table: dataTable.innerHTML,
-        },
-        dataType: "json",
+        type: 'GET',
         success: function(response) {
             let table = $('#table').DataTable();
             table.clear();
