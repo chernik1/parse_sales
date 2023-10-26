@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .parser.parser import run_programm
+from .parsers.parser import run_programm
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete
 import uuid

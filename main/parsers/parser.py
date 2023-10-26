@@ -147,5 +147,3 @@ def run_programm():
     return list_of_keywords
 
 #run_programm()
-
-
