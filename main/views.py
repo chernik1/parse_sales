@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from main.parsers.BUTB.parser import run_programm
+import main.parsers.BUTB.parser as butb
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete
 import uuid
@@ -15,7 +15,7 @@ def generate_unique_id():
 def form_data(request):
     parser_for_json = []
 
-    result = run_programm()
+    result = butb.run_programm()
 
     for element in result:
         new_keyword = list(element.keys())[0]

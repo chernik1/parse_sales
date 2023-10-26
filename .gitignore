@@ -1,4 +1,4 @@
 /venv
 db.sqlite3
-/main/parsers/BUTB/keywords.txt
-/main/parsers/BUTB/keywords_test
+/main/parsers/keywords.txt
+/main/parsers/keywords_test

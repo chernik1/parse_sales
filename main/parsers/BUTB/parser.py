@@ -1,5 +1,5 @@
 from playwright.sync_api import Playwright, Page, sync_playwright
-from main.parsers.BUTB.settings import today, yesterday, keywords
+from ..settings import today, yesterday, keywords
 from bs4 import BeautifulSoup
 from pprint import pprint
 #from settings import today, yesterday, keywords
