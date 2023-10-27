@@ -211,6 +211,11 @@ document.getElementById('start-button').addEventListener('click', function() {
                 nameCompanyCell.textContent = item.name_company;
                 row.appendChild(nameCompanyCell);
 
+                let payerNumberCell = document.createElement('td');
+                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
+                payerNumberCell.textContent = item.payer_number;
+                row.appendChild(payerNumberCell);
+
                 let namePurchaseCell = document.createElement('td');
                 namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
                 namePurchaseCell.textContent = item.name_purchase;
@@ -226,13 +231,9 @@ document.getElementById('start-button').addEventListener('click', function() {
                 priceCell.textContent = item.price;
                 row.appendChild(priceCell);
 
-                let payerNumberCell = document.createElement('td');
-                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
-                payerNumberCell.textContent = item.payer_number;
-                row.appendChild(payerNumberCell);
-
                 table.row.add(row);
             });
+
             table.draw();
         }
     });
