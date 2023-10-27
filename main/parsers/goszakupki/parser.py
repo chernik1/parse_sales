@@ -8,9 +8,6 @@ list_of_keywords = []
 
 
 
-
-
-
 def run(playwright: Playwright, keyword: str) -> None:
     pass
 
