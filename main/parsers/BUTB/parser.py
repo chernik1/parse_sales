@@ -1,8 +1,8 @@
 from playwright.sync_api import Playwright, Page, sync_playwright
-from ..settings import Settings
+from main.parsers.settings import Settings
 from bs4 import BeautifulSoup
 from pprint import pprint
-#from settings import today, yesterday, keywords
+import asyncio
 
 today, yesterday = Settings().date_date()
 keywords = Settings().get_keywords()
