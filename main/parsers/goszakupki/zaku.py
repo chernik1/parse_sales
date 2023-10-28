@@ -21,21 +21,40 @@ keywords = Settings().get_keywords()
 
 async def parse_url(page, url):
 
-    url = 'https://goszakupki.by/' + url
+    url = 'https://goszakupki.by' + url
 
     await page.goto(url)
 
     html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
-    with open('test.html', 'w', encoding='utf-8') as f:
-        f.write(html_content.decode('utf-8'))
-    tr_name_company = soup.find(text='Наименование организации')
+
+    name_company = soup.find(text='Наименование организации').find_parent('tr').find_all('td')[0].text
+    payer_company = soup.find(text='УНП организации').find_parent('tr').find_all('td')[0].text
+    main_name_purchase = soup.find(text='Название процедуры закупки из одного источника').find_parent('tr').find_all('td')[0].text
+    price = soup.find(text='Общая ориентировочная стоимость закупки').find_parent('tr').find_all('td')[0].text
+
+    list_purchase = []
+    all_purchase = soup.find_all('td', class_='lot-description')
+    for purchase in all_purchase:
+        list_purchase.append(purchase.text)
+    name_purchase = ', '.join(list_purchase)
+
+    list_result.append({
+        'url_purchase': url,
+        'name_company': name_company,
+        'payer_company': payer_company,
+        'main_name_purchase': main_name_purchase,
+        'price': price,
+        'name_purchase': name_purchase
+    })
+
+    page.go_back()
 
     return page
 
 
 
-async def parse_page(page):
+async def parse_page(page, keyword):
 
     html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -51,7 +70,7 @@ async def parse_page(page):
 
         page = await parse_url(page, a_url)
 
-        return page
+    return page
 
 def get_url_goszakupki(text, from_date, to_date):
     params = {
@@ -106,8 +125,7 @@ async def watchdog_goszakupki(from_date, to_date):
                 should_open = True
                 should_open &= any([actual_prices[zid] > MIN_PRICE for zid in new_zids])
                 if should_open:
-                    print(keyword)
-                    page = await parse_page(page)
+                    page = await parse_page(page, keyword)
                     webbrowser.get('windows-default').open(url)
             cache[keyword] = actual_zids
         with open("cache.txt", "w") as f:
