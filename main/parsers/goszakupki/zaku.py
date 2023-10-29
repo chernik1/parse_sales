@@ -19,7 +19,8 @@ keywords = Settings().get_keywords()
 
 
 
-async def parse_url(page, url):
+async def parse_url(page, url, keyword):
+    global list_result
 
     url = 'https://goszakupki.by' + url
 
@@ -30,8 +31,10 @@ async def parse_url(page, url):
 
     name_company = soup.find(text='Наименование организации').find_parent('tr').find_all('td')[0].text
     payer_company = soup.find(text='УНП организации').find_parent('tr').find_all('td')[0].text
-    main_name_purchase = soup.find(text='Название процедуры закупки из одного источника').find_parent('tr').find_all('td')[0].text
-    price = soup.find(text='Общая ориентировочная стоимость закупки').find_parent('tr').find_all('td')[0].text
+
+    main_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')[1].text
+
+    price = soup.find(string='Общая ориентировочная стоимость закупки').find_parent('tr').find_all('td')[0].text
 
     list_purchase = []
     all_purchase = soup.find_all('td', class_='lot-description')
@@ -40,6 +43,7 @@ async def parse_url(page, url):
     name_purchase = ', '.join(list_purchase)
 
     list_result.append({
+        'keyword': keyword,
         'url_purchase': url,
         'name_company': name_company,
         'payer_company': payer_company,
@@ -48,8 +52,7 @@ async def parse_url(page, url):
         'name_purchase': name_purchase
     })
 
-    page.go_back()
-
+    print(list_result)
     return page
 
 
@@ -68,7 +71,7 @@ async def parse_page(page, keyword):
 
         a_url = a_href['href']
 
-        page = await parse_url(page, a_url)
+        page = await parse_url(page, a_url, keyword)
 
     return page
 
@@ -116,27 +119,33 @@ async def watchdog_goszakupki(from_date, to_date):
         user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36'
 
         await page.set_extra_http_headers({'User-Agent': user_agent})
-        cache = get_cache()
+        # cache = get_cache()
         for keyword in keywords:
             url = get_url_goszakupki(keyword, from_date, to_date)
             actual_zids, actual_prices = await find_actual_zids(page, url)
-            new_zids = set(actual_zids).difference(cache.get(keyword, []))
+            # new_zids = set(actual_zids).difference(cache.get(keyword, []))
+            new_zids = actual_zids
             if new_zids:
                 should_open = True
                 should_open &= any([actual_prices[zid] > MIN_PRICE for zid in new_zids])
                 if should_open:
                     page = await parse_page(page, keyword)
-                    webbrowser.get('windows-default').open(url)
-            cache[keyword] = actual_zids
-        with open("cache.txt", "w") as f:
-            json.dump(cache, f)
+                    # webbrowser.get('windows-default').open(url)
+            # cache[keyword] = actual_zids
+        # with open("cache.txt", "w") as f:
+        #     json.dump(cache, f)
         await context.close()
         await browser.close()
 
 
 
-
-if __name__ == '__main__':
+def run_programm():
     today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=1)
+    yesterday = today - datetime.timedelta(days=2)
     asyncio.get_event_loop().run_until_complete(watchdog_goszakupki(yesterday, today))
+
+
+# if __name__ == '__main__':
+#     today = datetime.date.today()
+#     yesterday = today - datetime.timedelta(days=2)
+#     asyncio.get_event_loop().run_until_complete(watchdog_goszakupki(yesterday, today))

@@ -3,6 +3,7 @@ from django.http import JsonResponse
 import main.parsers.BUTB.parser as butb
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete
+import main.parsers.goszakupki.zaku as zaku
 import uuid
 
 # Create your views here.
@@ -147,3 +148,12 @@ def complete(request):
         }
         return JsonResponse(context, safe=False)
     redirect('/')
+
+
+@csrf_exempt
+def form_data_zaku(request):
+    table_for_json = []
+
+    result = zaku.run_programm()
+
+    return JsonResponse(table_for_json, safe=False)

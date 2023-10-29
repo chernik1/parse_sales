@@ -7,4 +7,5 @@ urlpatterns = [
     path('delete/', views.delete, name='delete'),
     path('delete_all/', views.delete_all, name='delete_all'),
     path('complete/', views.complete, name='complete'),
+    path('data_zaku/', views.form_data_zaku, name='form_data_zaku'),
 ]
