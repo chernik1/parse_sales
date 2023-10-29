@@ -19,6 +19,7 @@ Main
 <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
 
 <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/parse_zaku.js' %}"> </script>
 {% endblock %}
 
 {% block css %}
@@ -43,6 +44,20 @@ Main
         <td data-payer_number="{{ item.payer_number }}">{{ item.payer_number }}</td>
         <td data-name_purchase="{{ item.name_purchase }}">{{ item.name_purchase }}</td>
         <td data-date="{{ item.date }}">{{ item.date }}</td>
+        <td data-price="{{ item.price }}">{{ item.price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<table id="table-zaku">
+    {% for item in table %}
+    <tr>
+        <td data-keyword="{{ item.keyword }}">{{ item.keyword }}</td>
+        <td data-id_purchase="{{ item.url_purchase }}">{{ item.url_purchase }}</td>
+        <td data-name_company="{{ item.name_company }}">{{ item.name_company }}</td>
+        <td data-payer_number="{{ item.payer_number }}">{{ item.payer_number }}</td>
+        <td data-main_name_purchase="{{ item.main_name_purchase }}">{{ item.main_name_purchase }}</td>
+        <td data-name_purchase="{{ item.name_purchase }}">{{ item.name_purchase }}</td>
         <td data-price="{{ item.price }}">{{ item.price }}</td>
     </tr>
     {% endfor %}

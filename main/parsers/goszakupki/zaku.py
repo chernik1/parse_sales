@@ -12,8 +12,6 @@ from bs4 import BeautifulSoup
 MIN_PRICE = 5000
 MIN_PRICE_PAGE = 1000
 
-list_result = []
-
 today, yesterday = Settings().date_date()
 keywords = Settings().get_keywords()
 
@@ -30,7 +28,7 @@ async def parse_url(page, url, keyword):
     soup = BeautifulSoup(html_content, 'html.parser')
 
     name_company = soup.find(text='Наименование организации').find_parent('tr').find_all('td')[0].text
-    payer_company = soup.find(text='УНП организации').find_parent('tr').find_all('td')[0].text
+    payer_number = soup.find(text='УНП организации').find_parent('tr').find_all('td')[0].text
 
     main_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')[1].text
 
@@ -46,7 +44,7 @@ async def parse_url(page, url, keyword):
         'keyword': keyword,
         'url_purchase': url,
         'name_company': name_company,
-        'payer_company': payer_company,
+        'payer_number': payer_number,
         'main_name_purchase': main_name_purchase,
         'price': price,
         'name_purchase': name_purchase
@@ -139,10 +137,12 @@ async def watchdog_goszakupki(from_date, to_date):
 
 
 
-def run_programm():
+async def run_programm():
+    list_result = []
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(days=2)
-    asyncio.get_event_loop().run_until_complete(watchdog_goszakupki(yesterday, today))
+    await watchdog_goszakupki(yesterday, today)
+    return list_result
 
 
 # if __name__ == '__main__':

@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete
 import main.parsers.goszakupki.zaku as zaku
 import uuid
+import asyncio
 
 # Create your views here.
 
@@ -154,6 +155,11 @@ def complete(request):
 def form_data_zaku(request):
     table_for_json = []
 
-    result = zaku.run_programm()
+    result = asyncio.get_event_loop().run_until_complete(zaku.run_programm())
 
-    return JsonResponse(table_for_json, safe=False)
+    context = {
+        'table': result,
+    }
+
+    response = JsonResponse(context, safe=False)
+    return response
