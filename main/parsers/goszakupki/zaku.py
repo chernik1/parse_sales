@@ -1,24 +1,27 @@
-from main.parsers.settings import Settings
+import sys
+sys.path.append('C:\\Users\\Максим\\Desktop\\project\\father_help\\main\\parsers')
+
+import settings
 import asyncio
 import collections
 import json
 import os.path
-import webbrowser
 import datetime
 from urllib.parse import urlencode
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
+from threading import Thread
+
+list_result = []
 
 MIN_PRICE = 5000
 MIN_PRICE_PAGE = 1000
 
-today, yesterday = Settings().date_date()
-keywords = Settings().get_keywords()
-
-
+today, yesterday = settings.Settings().date_date()
+keywords = settings.Settings().get_keywords()
 
 async def parse_url(page, url, keyword):
-    global list_result
+    #global list_result
 
     url = 'https://goszakupki.by' + url
 
@@ -135,15 +138,25 @@ async def watchdog_goszakupki(from_date, to_date):
         await context.close()
         await browser.close()
 
-
-
-async def run_programm():
-    list_result = []
+def run_programm():
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(days=2)
-    await watchdog_goszakupki(yesterday, today)
+
+    def run_async_code():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        result = loop.run_until_complete(watchdog_goszakupki(yesterday, today))
+        loop.close()
+        return result
+
+    thread = Thread(target=run_async_code)
+    thread.start()
+    thread.join()
+
     return list_result
 
+# result = run_programm()
+# print(result)
 
 # if __name__ == '__main__':
 #     today = datetime.date.today()

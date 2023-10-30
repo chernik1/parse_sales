@@ -1,11 +1,14 @@
 from playwright.sync_api import Playwright, Page, sync_playwright
-from main.parsers.settings import Settings
+import sys
+sys.path.append('C:\\Users\\Максим\\Desktop\\project\\father_help\\main\\parsers')
+
+import settings
 from bs4 import BeautifulSoup
 from pprint import pprint
 import asyncio
 
-today, yesterday = Settings().date_date()
-keywords = Settings().get_keywords()
+today, yesterday = settings.Settings().date_date()
+keywords = settings.Settings().get_keywords()
 
 
 list_of_keywords = []

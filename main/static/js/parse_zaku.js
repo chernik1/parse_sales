@@ -109,50 +109,51 @@ function start(){
         type: "POST",
         dataType: "json",
         success: function(response) {
-//            table.clear();
-//            response.table.forEach(function(item) {
-//                let row = document.createElement('tr');
-//
-//                let keywordCell = document.createElement('td');
-//                keywordCell.setAttribute('data-keyword', item.keyword);
-//                keywordCell.textContent = item.keyword;
-//                row.appendChild(keywordCell);
-//
-//                let idPurchaseCell = document.createElement('td');
-//                idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
-//                idPurchaseCell.textContent = item.id_purchase;
-//                row.appendChild(idPurchaseCell);
-//
-//                let nameCompanyCell = document.createElement('td');
-//                nameCompanyCell.setAttribute('data-name_company', item.name_company);
-//                nameCompanyCell.textContent = item.name_company;
-//                row.appendChild(nameCompanyCell);
-//
-//                let namePurchaseCell = document.createElement('td');
-//                namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
-//                namePurchaseCell.textContent = item.name_purchase;
-//                row.appendChild(namePurchaseCell);
-//
-//                let dateCell = document.createElement('td');
-//                dateCell.setAttribute('data-date', item.date);
-//                dateCell.textContent = item.date;
-//                row.appendChild(dateCell);
-//
-//                let priceCell = document.createElement('td');
-//                priceCell.setAttribute('data-price', item.price);
-//                priceCell.textContent = item.price;
-//                row.appendChild(priceCell);
-//
-//                let payerNumberCell = document.createElement('td');
-//                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
-//                payerNumberCell.textContent = item.payer_number;
-//                row.appendChild(payerNumberCell);
-//
-//                table.row.add(row);
-//            });
-//            table.draw();
+            let tableZaku = $('#table-zaku').DataTable();
+            tableZaku.clear();
+            response.table.forEach(function(item) {
+                let row = document.createElement('tr');
+
+                let keywordCell = document.createElement('td');
+                keywordCell.setAttribute('data-keyword', item.keyword);
+                keywordCell.textContent = item.keyword;
+                row.appendChild(keywordCell);
+
+                let idPurchaseCell = document.createElement('td');
+                idPurchaseCell.setAttribute('data-id_purchase', item.url_purchase);
+                idPurchaseCell.textContent = item.url_purchase;
+                row.appendChild(idPurchaseCell);
+
+                let nameCompanyCell = document.createElement('td');
+                nameCompanyCell.setAttribute('data-name_company', item.name_company);
+                nameCompanyCell.textContent = item.name_company;
+                row.appendChild(nameCompanyCell);
+
+                let payerNumberCell = document.createElement('td');
+                payerNumberCell.setAttribute('data-payer_number', item.payer_number);
+                payerNumberCell.textContent = item.payer_number;
+                row.appendChild(payerNumberCell);
+
+                let mainNamePurchaseCell = document.createElement('td');
+                mainNamePurchaseCell.setAttribute('data-main_name_purchase', item.main_name_purchase);
+                mainNamePurchaseCell.textContent = item.main_name_purchase;
+                row.appendChild(mainNamePurchaseCell);
+
+                let namePurchaseCell = document.createElement('td');
+                namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
+                namePurchaseCell.textContent = item.name_purchase;
+                row.appendChild(namePurchaseCell);
+
+                let priceCell = document.createElement('td');
+                priceCell.setAttribute('data-price', item.price);
+                priceCell.textContent = item.price;
+                row.appendChild(priceCell);
+
+                tableZaku.row.add(row);
+            });
+            tableZaku.draw();
         }
     });
-};
+}
 
 });

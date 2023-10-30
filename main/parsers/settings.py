@@ -4,7 +4,7 @@ import os
 
 class Settings:
     def get_keywords(self) -> list[str]:
-        file_path = os.path.join(os.path.dirname(__file__), 'keywords.txt')
+        file_path = os.path.join(os.path.dirname(__file__), 'keywords_test')
         with open(file_path, 'rt', encoding='utf-8') as f:
             return [k.strip() for k in f]
 

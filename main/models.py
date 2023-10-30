@@ -24,3 +24,15 @@ class Parser(models.Model):
         return f'{self.keyword} - {self.name_purchase}'
 
 
+class ParserZaku(models.Model):
+
+    keyword = models.CharField(max_length=10000, default='')
+    url = models.CharField(max_length=10000, default='')
+    name_company = models.CharField(max_length=10000, default='')
+    name_purchase = models.CharField(max_length=10000, default='')
+    main_name_purchase = models.CharField(max_length=10000, default='')
+    name_purchase = models.CharField(max_length=10000, default='')
+    price = models.CharField(max_length=10000, default='')
+
+    def __str__(self):
+        return f'{self.keyword} - {self.name_purchase}'

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Parser, ParserDelete
+from .models import Parser, ParserDelete, ParserZaku
 # Register your models here.
 
 @admin.register(Parser)
@@ -15,3 +15,7 @@ class ParserAdmin(admin.ModelAdmin):
 @admin.register(ParserDelete)
 class ParserDeleteAdmin(admin.ModelAdmin):
     list_display = ['id_purchase']
+
+@admin.register(ParserZaku)
+class ParserZakuAdmin(admin.ModelAdmin):
+    list_display = ['keyword', 'url', 'name_company', 'name_purchase', 'main_name_purchase', 'name_purchase', 'price']
