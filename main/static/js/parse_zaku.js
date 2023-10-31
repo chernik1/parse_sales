@@ -23,7 +23,7 @@ $(document).ready(function() {
     buttons: [
         {
             text: 'Завершить',
-            className: 'button-table-complete',
+            className: 'button-table',
             action: function (e, dt, node, config){
 
                 let selectedIds = [];
@@ -38,6 +38,13 @@ $(document).ready(function() {
             }
         },
         {
+            text: 'Удалить всё',
+            className: 'button-table',
+            action: function (e, dt, node, config){
+                deleteAllFunction();
+            }
+        },
+        {
             text: 'Старт',
             className: 'button-table-start',
             action: function (e, dt, node, config){
@@ -49,15 +56,17 @@ $(document).ready(function() {
 
 function completeFunction(id_list){
    $.ajax({
-        url: "/complete/",
+        url: "/complete_zaku/",
         type: "POST",
         data: {
             id_list: id_list,
         },
         dataType: "json",
         success: function(response) {
-            table.clear();
-            response.table.forEach(function(item) {
+            let tableZaku = $('#table-zaku').DataTable();
+            tableZaku.clear();
+            console.log(response);
+            response.parser_zaku.forEach(function(item) {
                 let row = document.createElement('tr');
 
                 let keywordCell = document.createElement('td');
@@ -66,8 +75,8 @@ function completeFunction(id_list){
                 row.appendChild(keywordCell);
 
                 let idPurchaseCell = document.createElement('td');
-                idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
-                idPurchaseCell.textContent = item.id_purchase;
+                idPurchaseCell.setAttribute('data-id_purchase', item.url);
+                idPurchaseCell.textContent = item.url;
                 row.appendChild(idPurchaseCell);
 
                 let nameCompanyCell = document.createElement('td');
@@ -75,32 +84,44 @@ function completeFunction(id_list){
                 nameCompanyCell.textContent = item.name_company;
                 row.appendChild(nameCompanyCell);
 
+                let payerNumberCell = document.createElement('td');
+                payerNumberCell.setAttribute('data-payer_number', item.payer_number);
+                payerNumberCell.textContent = item.payer_number;
+                row.appendChild(payerNumberCell);
+
+                let mainNamePurchaseCell = document.createElement('td');
+                mainNamePurchaseCell.setAttribute('data-main_name_purchase', item.main_name_purchase);
+                mainNamePurchaseCell.textContent = item.main_name_purchase;
+                row.appendChild(mainNamePurchaseCell);
+
                 let namePurchaseCell = document.createElement('td');
                 namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
                 namePurchaseCell.textContent = item.name_purchase;
                 row.appendChild(namePurchaseCell);
-
-                let dateCell = document.createElement('td');
-                dateCell.setAttribute('data-date', item.date);
-                dateCell.textContent = item.date;
-                row.appendChild(dateCell);
 
                 let priceCell = document.createElement('td');
                 priceCell.setAttribute('data-price', item.price);
                 priceCell.textContent = item.price;
                 row.appendChild(priceCell);
 
-                let payerNumberCell = document.createElement('td');
-                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
-                payerNumberCell.textContent = item.payer_number;
-                row.appendChild(payerNumberCell);
-
-                table.row.add(row);
+                tableZaku.row.add(row);
             });
+            tableZaku.draw();
+        }
+    });
+}
+
+function deleteAllFunction() {
+    $.ajax({
+        url: "/delete_all_zaku/",
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            table.clear();
             table.draw();
         }
     });
-};
+}
 
 
 function start(){
@@ -111,7 +132,7 @@ function start(){
         success: function(response) {
             let tableZaku = $('#table-zaku').DataTable();
             tableZaku.clear();
-            response.table.forEach(function(item) {
+            response.parser_zaku.forEach(function(item) {
                 let row = document.createElement('tr');
 
                 let keywordCell = document.createElement('td');
@@ -120,8 +141,8 @@ function start(){
                 row.appendChild(keywordCell);
 
                 let idPurchaseCell = document.createElement('td');
-                idPurchaseCell.setAttribute('data-id_purchase', item.url_purchase);
-                idPurchaseCell.textContent = item.url_purchase;
+                idPurchaseCell.setAttribute('data-id_purchase', item.url);
+                idPurchaseCell.textContent = item.url;
                 row.appendChild(idPurchaseCell);
 
                 let nameCompanyCell = document.createElement('td');

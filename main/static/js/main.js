@@ -72,7 +72,7 @@ function completeFunction(id_list){
         dataType: "json",
         success: function(response) {
             table.clear();
-            response.table.forEach(function(item) {
+            response.parser.forEach(function(item) {
                 let row = document.createElement('tr');
 
                 let keywordCell = document.createElement('td');
@@ -128,7 +128,7 @@ function deleteFunction(id_list) {
         success: function(response) {
             table.clear().draw();
 
-            response.table.forEach(function(item) {
+            response.parser.forEach(function(item) {
                 let row = document.createElement('tr');
 
                 let keywordCell = document.createElement('td');
@@ -193,7 +193,7 @@ document.getElementById('start-button').addEventListener('click', function() {
             let table = $('#table').DataTable();
             table.clear();
 
-            response.table.forEach(function(item) {
+            response.parser.forEach(function(item) {
                 let row = document.createElement('tr');
 
                 let keywordCell = document.createElement('td');
@@ -238,6 +238,9 @@ document.getElementById('start-button').addEventListener('click', function() {
         }
     });
 });
+
+
+
 
 });
 

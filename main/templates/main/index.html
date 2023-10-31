@@ -36,7 +36,7 @@ Main
 </div>
 
 <table id="table">
-    {% for item in table %}
+    {% for item in parser %}
     <tr>
         <td data-keyword="{{ item.keyword }}">{{ item.keyword }}</td>
         <td data-id_purchase="{{ item.id_purchase }}">{{ item.id_purchase }}</td>
@@ -50,10 +50,10 @@ Main
 </table>
 
 <table id="table-zaku">
-    {% for item in table %}
+    {% for item in parser_zaku %}
     <tr>
         <td data-keyword="{{ item.keyword }}">{{ item.keyword }}</td>
-        <td data-id_purchase="{{ item.url_purchase }}">{{ item.url_purchase }}</td>
+        <td data-id_purchase="{{ item.url }}">{{ item.url }}</td>
         <td data-name_company="{{ item.name_company }}">{{ item.name_company }}</td>
         <td data-payer_number="{{ item.payer_number }}">{{ item.payer_number }}</td>
         <td data-main_name_purchase="{{ item.main_name_purchase }}">{{ item.main_name_purchase }}</td>

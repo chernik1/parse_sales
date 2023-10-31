@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 import sys
-sys.path.append('C:/Users/Максим/Desktop/project/father_help/main/parsers/goszakupki')
-sys.path.append('C:/Users/Максим/Desktop/project/father_help/main/parsers/BUTB')
-import parser as butb
-import zaku
+import main.parsers.BUTB.parser as butb
+import main.parsers.goszakupki.zaku as zaku
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Parser, ParserDelete
+from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
 import uuid
 from time import sleep
 
@@ -73,7 +71,7 @@ def form_data(request):
                     'id': new_id,
                 })
     context = {
-        'table': parser_for_json,
+        'parser': parser_for_json,
     }
 
     return JsonResponse(context, safe=False)
@@ -103,7 +101,7 @@ def delete(request):
                 'payer_number':  item.payer_number,
             })
         context = {
-            'table': table_for_json,
+            'parser': table_for_json,
         }
         return JsonResponse(context, safe=False)
     redirect('/')
@@ -119,8 +117,11 @@ def delete_all(request):
 
 def index(request):
     parser = Parser.objects.all()
+    parser_zaku = ParserZaku.objects.all()
+
     context = {
         'parser': parser,
+        'parser_zaku': parser_zaku,
     }
     return render(request, 'main/index.html', context)
 
@@ -149,7 +150,7 @@ def complete(request):
                 'payer_number': item.payer_number,
             })
         context = {
-            'table': table_for_json,
+            'parser': table_for_json,
         }
         return JsonResponse(context, safe=False)
     redirect('/')
@@ -157,13 +158,77 @@ def complete(request):
 
 @csrf_exempt
 def form_data_zaku(request):
-    table_for_json = []
 
     result = zaku.run_programm()
-    print(f"result: {result}")
+    parser_zaku_for_json = []
+
+    for item in result:
+
+        if ParserDelete.objects.filter(id_purchase=item['url_purchase']).exists():
+            continue
+
+        if ParserZaku.objects.filter(keyword=item['url_purchase']).exists():
+            continue
+
+        ParserZaku.objects.create(
+            keyword=item['keyword'],
+            url=item['url_purchase'],
+            name_company=item['name_company'],
+            payer_number=item['payer_number'],
+            main_name_purchase=item['main_name_purchase'],
+            name_purchase=item['name_purchase'],
+            price=item['price'],
+        )
+
+        parser_zaku_for_json.append({
+            'keyword': item['keyword'],
+            'url': item['url_purchase'],
+            'name_company': item['name_company'],
+            'payer_number': item['payer_number'],
+            'main_name_purchase': item['main_name_purchase'],
+            'name_purchase': item['name_purchase'],
+            'price': item['price'],
+        })
 
     context = {
-        'table': result,
+        'parser_zaku': parser_zaku_for_json,
     }
 
     return JsonResponse(context, safe=False)
+
+def delete_all_zaku(request):
+    if request.method == 'GET':
+        parser_zaku_all = ParserZaku.objects.all()
+        for item in parser_zaku_all:
+            item.delete()
+        return JsonResponse('ok', safe=False)
+
+
+@csrf_exempt
+def complete_zaku(request):
+    if request.method == 'POST':
+        list_id = request.POST.getlist('id_list[]')
+        list_id = list(filter(None, list_id))
+        for id_item in list_id:
+            queryset = ParserZaku.objects.filter(url=id_item)
+            add_delete = ParserZakuDelete.objects.create(
+                url=id_item,
+            )
+            item = queryset.first()
+            item.delete()
+        table = ParserZaku.objects.all()
+        table_for_json = []
+        for item in table:
+            table_for_json.append({
+                'keyword': item.keyword,
+                'url': item.url,
+                'name_company': item.name_company,
+                'payer_number': item.payer_number,
+                'main_name_purchase': item.main_name_purchase,
+                'name_purchase': item.name_purchase,
+                'price': item.price,
+            })
+        context = {
+            'parser_zaku': table_for_json,
+        }
+        return JsonResponse(context, safe=False)

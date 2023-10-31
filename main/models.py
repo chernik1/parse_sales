@@ -27,12 +27,18 @@ class Parser(models.Model):
 class ParserZaku(models.Model):
 
     keyword = models.CharField(max_length=10000, default='')
-    url = models.CharField(max_length=10000, default='')
+    url = models.URLField(max_length=10000)
     name_company = models.CharField(max_length=10000, default='')
     name_purchase = models.CharField(max_length=10000, default='')
     main_name_purchase = models.CharField(max_length=10000, default='')
-    name_purchase = models.CharField(max_length=10000, default='')
+    payer_number = models.CharField(max_length=10000, default='')
     price = models.CharField(max_length=10000, default='')
 
     def __str__(self):
         return f'{self.keyword} - {self.name_purchase}'
+
+class ParserZakuDelete(models.Model):
+    url = models.URLField(max_length=10000, default='')
+
+    def __str__(self):
+        return f'{self.url}'

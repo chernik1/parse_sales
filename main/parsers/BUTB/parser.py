@@ -1,8 +1,6 @@
 from playwright.sync_api import Playwright, Page, sync_playwright
 import sys
-sys.path.append('C:\\Users\\Максим\\Desktop\\project\\father_help\\main\\parsers')
-
-import settings
+import main.parsers.settings as settings
 from bs4 import BeautifulSoup
 from pprint import pprint
 import asyncio

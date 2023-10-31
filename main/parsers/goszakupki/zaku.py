@@ -1,7 +1,5 @@
 import sys
-sys.path.append('C:\\Users\\Максим\\Desktop\\project\\father_help\\main\\parsers')
-
-import settings
+import main.parsers.settings as settings
 import asyncio
 import collections
 import json
