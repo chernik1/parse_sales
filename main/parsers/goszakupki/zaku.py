@@ -138,7 +138,7 @@ async def watchdog_goszakupki(from_date, to_date):
 
 def run_programm():
     today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=2)
+    yesterday = today - datetime.timedelta(days=1)
 
     def run_async_code():
         loop = asyncio.new_event_loop()
