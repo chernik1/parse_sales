@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
 import uuid
 from time import sleep
+import asyncio
 
 
 # Create your views here.

@@ -18,6 +18,12 @@ MIN_PRICE_PAGE = 1000
 today, yesterday = settings.Settings().date_date()
 keywords = settings.Settings().get_keywords()
 
+async def validate_main_name_purchase(main_name_purchase, soup):
+    if '№ закупки в ГИАС' in main_name_purchase:
+        main_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')[2].text
+    return main_name_purchase, soup
+
+
 async def parse_url(page, url, keyword):
     #global list_result
 
@@ -32,6 +38,7 @@ async def parse_url(page, url, keyword):
     payer_number = soup.find(text='УНП организации').find_parent('tr').find_all('td')[0].text
 
     main_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')[1].text
+    main_name_purchase, soup = await validate_main_name_purchase(main_name_purchase, soup)
 
     price = soup.find(string='Общая ориентировочная стоимость закупки').find_parent('tr').find_all('td')[0].text
 

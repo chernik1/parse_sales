@@ -1,9 +1,10 @@
-from playwright.sync_api import Playwright, Page, sync_playwright
+from playwright.async_api import async_playwright, Playwright, Page
 import sys
 import main.parsers.settings as settings
 from bs4 import BeautifulSoup
 from pprint import pprint
 import asyncio
+from threading import Thread
 
 today, yesterday = settings.Settings().date_date()
 keywords = settings.Settings().get_keywords()
@@ -11,9 +12,9 @@ keywords = settings.Settings().get_keywords()
 
 list_of_keywords = []
 
-def check_page(page: Page) -> tuple[Page, list]:
+async def check_page(page: Page) -> tuple[Page, list]:
 
-    html_content = page.content()
+    html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
     a_href_page_find = soup.find(id='fra:auctionList:tbody')
     if a_href_page_find is None:
@@ -22,9 +23,9 @@ def check_page(page: Page) -> tuple[Page, list]:
 
     if len(a_href_page_find) == 20:
         element_id = a_href_page_find[18]['id'].replace(':', '\\:').replace('\u0000', '')
-        page.wait_for_selector(f'#{element_id}', state='detached')
+        await page.wait_for_selector(f'#{element_id}', state='detached')
 
-        html_content = page.content()
+        html_content = await page.content()
         soup = BeautifulSoup(html_content, 'html.parser')
         a_href_page_find = soup.find(id='fra:auctionList:tbody')
         if a_href_page_find is None:
@@ -35,11 +36,10 @@ def check_page(page: Page) -> tuple[Page, list]:
 
     return (page, [])
 
-
-def parse_a_href(page: Page) -> tuple[Page, list]:
+async def parse_a_href(page: Page) -> tuple[Page, list]:
     list_of_objects = []
 
-    html_content = page.content()
+    html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
 
     register = soup(text='Регистрационный номер')
@@ -85,69 +85,73 @@ def parse_a_href(page: Page) -> tuple[Page, list]:
 
 
 
-def step(page: Page, keyword: str) -> Page:
+async def step(page: Page, keyword: str) -> Page:
 
-    page.goto("https://zakupki.butb.by/auctions/reestrauctions.html")
-    page.get_by_role("link", name="Раскрыть форму поиска").click()
-    page.locator("input[name=\"fra\\:j_idt174\"]").click()
-    page.locator("input[name=\"fra\\:j_idt174\"]").fill(keyword)
-    page.locator("input[name=\"fra\\:date1\"]").click()
-    page.locator("input[name=\"fra\\:date1\"]").fill(yesterday)
-    page.locator("input[name=\"fra\\:date2\"]").click()
-    page.locator("input[name=\"fra\\:date2\"]").fill(today)
-    page.get_by_role("button", name="Искать").click()
+    await page.goto("https://zakupki.butb.by/auctions/reestrauctions.html")
+    await page.get_by_role("link", name="Раскрыть форму поиска").click()
+    await page.locator("input[name=\"fra\\:j_idt174\"]").click()
+    await page.locator("input[name=\"fra\\:j_idt174\"]").fill(keyword)
+    await page.locator("input[name=\"fra\\:date1\"]").click()
+    await page.locator("input[name=\"fra\\:date1\"]").fill(yesterday)
+    await page.locator("input[name=\"fra\\:date2\"]").click()
+    await page.locator("input[name=\"fra\\:date2\"]").fill(today)
+    await page.get_by_role("button", name="Искать").click()
 
     return page
 
-def run(playwright: Playwright, keyword: str) -> None:
+async def run() -> list[dict[str, list[any]]]:
     global list_of_keywords
-    browser = playwright.chromium.launch(headless=True)
-    context = browser.new_context()
-    page = context.new_page()
-    page = step(page, keyword)
-    keyword_dict = {}
-    keyword_dict[keyword] = []
+    result = []
+    async with async_playwright() as playwright:
+        for keyword in keywords:
+            keyword_dict = {keyword: []}
+            browser = await playwright.chromium.launch(headless=True)
+            context = await browser.new_context()
+            page = await context.new_page()
+            await step(page, keyword)
 
-    page, a_href_page_find = check_page(page)
+            while True:
+                page, a_href_page_find = await check_page(page)
+                if len(a_href_page_find) == 0:
+                    break
 
-    if len(a_href_page_find) > 0:
-        for a_href in a_href_page_find:
-            html_content = page.content()
-            soup = BeautifulSoup(html_content, 'html.parser')
+                for a_href in a_href_page_find:
+                    html_content = await page.content()
+                    soup = BeautifulSoup(html_content, 'html.parser')
 
-            element_id = a_href['id'].replace(':', '\\:').replace('\u0000', '')
-            page.query_selector(f'#{element_id}').click()
+                    element_id = a_href['id'].replace(':', '\\:').replace('\u0000', '')
+                    element = await page.query_selector(f'#{element_id}')
+                    await element.click()
 
-            page.wait_for_url('https://zakupki.butb.by/auctions/viewinvitation.html')
+                    await page.wait_for_url('https://zakupki.butb.by/auctions/viewinvitation.html')
 
-            html_content = page.content()
-            soup = BeautifulSoup(html_content, 'html.parser')
+                    html_content = await page.content()
+                    soup = BeautifulSoup(html_content, 'html.parser')
 
+                    page, list_element = await parse_a_href(page)
+                    print(list_element)
+                    keyword_dict[keyword].append(list_element)
 
-            page, list_element = parse_a_href(page)
-            keyword_dict[keyword].append(list_element)
+                    await page.goto("https://zakupki.butb.by/auctions/reestrauctions.html")
 
-            context.close()
-            browser.close()
-
-            browser = playwright.chromium.launch(headless=True)
-            context = browser.new_context()
-            page = context.new_page()
-            page = step(page, keyword)
-
-    list_of_keywords.append(keyword_dict)
-    # ---------------------
-    context.close()
-    browser.close()
+            result.append(keyword_dict)
+            await context.close()
+    list_of_keywords = result
+    return result
 
 def run_programm():
-    global list_of_keywords
-    list_of_keywords = []
-    for keyword in keywords:
-        with sync_playwright() as playwright:
-            run(playwright, keyword)
+    def run_async_code():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        result = loop.run_until_complete(run())
+        loop.close()
+        return result
 
-    pprint(list_of_keywords)
+    thread = Thread(target=run_async_code)
+    thread.start()
+    thread.join()
+
     return list_of_keywords
 
-#run_programm()
+
+#result = asyncio.get_event_loop().run_until_complete(run(keywords))
