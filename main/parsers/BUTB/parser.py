@@ -104,10 +104,14 @@ async def run() -> list[dict[str, list[any]]]:
     result = []
     async with async_playwright() as playwright:
         for keyword in keywords:
-            keyword_dict = {keyword: []}
             browser = await playwright.chromium.launch(headless=True)
             context = await browser.new_context()
             page = await context.new_page()
+            user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36'
+
+            await page.set_extra_http_headers({'User-Agent': user_agent})
+
+            keyword_dict = {keyword: []}
             await step(page, keyword)
 
             while True:
@@ -136,6 +140,7 @@ async def run() -> list[dict[str, list[any]]]:
 
             result.append(keyword_dict)
             await context.close()
+            await browser.close()
     list_of_keywords = result
     return result
 
