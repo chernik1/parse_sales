@@ -18,9 +18,19 @@ MIN_PRICE_PAGE = 1000
 today, yesterday = settings.Settings().date_date()
 keywords = settings.Settings().get_keywords()
 
-async def validate_main_name_purchase(main_name_purchase, soup):
-    if '№ закупки в ГИАС' in main_name_purchase:
-        main_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')[2].text
+async def form_main_name_purchase(soup):
+    tr_all_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('tr')
+    td_all_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')
+    for index, tr_element in enumerate(tr_all_name_purchase):
+        text = tr_element.text.strip()
+        if 'Название процедуры закупки' in text:
+            main_name_purchase = td_all_name_purchase[index + 1].text
+            return main_name_purchase, soup
+        elif 'Название запроса ценовых предложений' in text:
+            main_name_purchase = td_all_name_purchase[index + 1].text
+            return main_name_purchase, soup
+        else:
+            main_name_purchase = 'Не нашлось'
     return main_name_purchase, soup
 
 
@@ -37,8 +47,8 @@ async def parse_url(page, url, keyword):
     name_company = soup.find(text='Наименование организации').find_parent('tr').find_all('td')[0].text
     payer_number = soup.find(text='УНП организации').find_parent('tr').find_all('td')[0].text
 
-    main_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')[1].text
-    main_name_purchase, soup = await validate_main_name_purchase(main_name_purchase, soup)
+    main_name_purchase, soup = await form_main_name_purchase(soup)
+
 
     price = soup.find(string='Общая ориентировочная стоимость закупки').find_parent('tr').find_all('td')[0].text
 
@@ -58,7 +68,6 @@ async def parse_url(page, url, keyword):
         'name_purchase': name_purchase
     })
 
-    print(list_result)
     return page
 
 
@@ -136,10 +145,6 @@ async def watchdog_goszakupki(from_date, to_date):
                 should_open &= any([actual_prices[zid] > MIN_PRICE for zid in new_zids])
                 if should_open:
                     page = await parse_page(page, keyword)
-                    # webbrowser.get('windows-default').open(url)
-            # cache[keyword] = actual_zids
-        # with open("cache.txt", "w") as f:
-        #     json.dump(cache, f)
         await context.close()
         await browser.close()
 
@@ -162,8 +167,3 @@ def run_programm():
 
 # result = run_programm()
 # print(result)
-
-# if __name__ == '__main__':
-#     today = datetime.date.today()
-#     yesterday = today - datetime.timedelta(days=2)
-#     asyncio.get_event_loop().run_until_complete(watchdog_goszakupki(yesterday, today))

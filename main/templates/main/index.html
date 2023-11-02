@@ -38,7 +38,6 @@ Main
 <table id="table">
     {% for item in parser %}
     <tr>
-        <td data-keyword="{{ item.keyword }}">{{ item.keyword }}</td>
         <td data-id_purchase="{{ item.id_purchase }}">{{ item.id_purchase }}</td>
         <td data-name_company="{{ item.name_company }}">{{ item.name_company }}</td>
         <td data-payer_number="{{ item.payer_number }}">{{ item.payer_number }}</td>
@@ -52,12 +51,10 @@ Main
 <table id="table-zaku">
     {% for item in parser_zaku %}
     <tr>
-        <td data-keyword="{{ item.keyword }}">{{ item.keyword }}</td>
         <td data-id_purchase="{{ item.url }}">{{ item.url }}</td>
         <td data-name_company="{{ item.name_company }}">{{ item.name_company }}</td>
         <td data-payer_number="{{ item.payer_number }}">{{ item.payer_number }}</td>
         <td data-main_name_purchase="{{ item.main_name_purchase }}">{{ item.main_name_purchase }}</td>
-        <td data-name_purchase="{{ item.name_purchase }}">{{ item.name_purchase }}</td>
         <td data-price="{{ item.price }}">{{ item.price }}</td>
     </tr>
     {% endfor %}

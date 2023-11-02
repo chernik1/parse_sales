@@ -67,10 +67,6 @@ def form_data(request):
                     keyword=new_keyword,
                     id=new_id,
                 )
-                parser_for_json.append({
-                    'keyword': new_keyword,
-                    'id': new_id,
-                })
     context = {
         'parser': parser_for_json,
     }
@@ -165,10 +161,10 @@ def form_data_zaku(request):
 
     for item in result:
 
-        if ParserDelete.objects.filter(id_purchase=item['url_purchase']).exists():
+        if ParserZakuDelete.objects.filter(url=item['url_purchase']).exists():
             continue
 
-        if ParserZaku.objects.filter(keyword=item['url_purchase']).exists():
+        if ParserZaku.objects.filter(url=item['url_purchase']).exists():
             continue
 
         ParserZaku.objects.create(
@@ -233,3 +229,14 @@ def complete_zaku(request):
             'parser_zaku': table_for_json,
         }
         return JsonResponse(context, safe=False)
+
+@csrf_exempt
+def complete_all_zaku(request):
+    if request.method == 'GET':
+        parser_zaku_all = ParserZaku.objects.all()
+        for item in parser_zaku_all:
+            add_delete = ParserZakuDelete.objects.create(
+                url=item.url,
+            )
+            item.delete()
+        return JsonResponse('ok', safe=False)

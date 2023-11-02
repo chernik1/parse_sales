@@ -7,7 +7,6 @@ $(document).ready(function() {
     "order": [[0, 'asc']],
     "ordering": true,
     columns: [
-        {title: "Keyword"},
         {title: "Регистрационный номер"},
         {title: "Имя компании"},
         {title: 'УНП'},
@@ -75,11 +74,6 @@ function completeFunction(id_list){
             response.parser.forEach(function(item) {
                 let row = document.createElement('tr');
 
-                let keywordCell = document.createElement('td');
-                keywordCell.setAttribute('data-keyword', item.keyword);
-                keywordCell.textContent = item.keyword;
-                row.appendChild(keywordCell);
-
                 let idPurchaseCell = document.createElement('td');
                 idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
                 idPurchaseCell.textContent = item.id_purchase;
@@ -130,11 +124,6 @@ function deleteFunction(id_list) {
 
             response.parser.forEach(function(item) {
                 let row = document.createElement('tr');
-
-                let keywordCell = document.createElement('td');
-                keywordCell.setAttribute('data-keyword', item.keyword);
-                keywordCell.textContent = item.keyword;
-                row.appendChild(keywordCell);
 
                 let idPurchaseCell = document.createElement('td');
                 idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
@@ -195,11 +184,6 @@ document.getElementById('start-button').addEventListener('click', function() {
 
             response.parser.forEach(function(item) {
                 let row = document.createElement('tr');
-
-                let keywordCell = document.createElement('td');
-                keywordCell.setAttribute('data-keyword', item.keyword);
-                keywordCell.textContent = item.keyword;
-                row.appendChild(keywordCell);
 
                 let idPurchaseCell = document.createElement('td');
                 idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);

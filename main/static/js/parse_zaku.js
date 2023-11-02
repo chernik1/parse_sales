@@ -6,12 +6,10 @@ $(document).ready(function() {
     "order": [[0, 'asc']],
     "ordering": true,
     columns: [
-        {title: "Keyword"},
         {title: "Ссылка"},
         {title: "Имя компании"},
         {title: 'УНП'},
         {title: "Предмет"},
-        {title: "Предмет 2"},
         {title: "Цена"},
     ],
     dom: 'Bfrtip',
@@ -45,6 +43,15 @@ $(document).ready(function() {
             }
         },
         {
+            text: 'Завершить всё',
+            className: 'button-table',
+            action: function (e, dt, node, config){
+
+                completeFunctionAll();
+
+            }
+        },
+        {
             text: 'Старт',
             className: 'button-table-start',
             action: function (e, dt, node, config){
@@ -69,11 +76,6 @@ function completeFunction(id_list){
             response.parser_zaku.forEach(function(item) {
                 let row = document.createElement('tr');
 
-                let keywordCell = document.createElement('td');
-                keywordCell.setAttribute('data-keyword', item.keyword);
-                keywordCell.textContent = item.keyword;
-                row.appendChild(keywordCell);
-
                 let idPurchaseCell = document.createElement('td');
                 idPurchaseCell.setAttribute('data-id_purchase', item.url);
                 idPurchaseCell.textContent = item.url;
@@ -93,11 +95,6 @@ function completeFunction(id_list){
                 mainNamePurchaseCell.setAttribute('data-main_name_purchase', item.main_name_purchase);
                 mainNamePurchaseCell.textContent = item.main_name_purchase;
                 row.appendChild(mainNamePurchaseCell);
-
-                let namePurchaseCell = document.createElement('td');
-                namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
-                namePurchaseCell.textContent = item.name_purchase;
-                row.appendChild(namePurchaseCell);
 
                 let priceCell = document.createElement('td');
                 priceCell.setAttribute('data-price', item.price);
@@ -135,11 +132,6 @@ function start(){
             response.parser_zaku.forEach(function(item) {
                 let row = document.createElement('tr');
 
-                let keywordCell = document.createElement('td');
-                keywordCell.setAttribute('data-keyword', item.keyword);
-                keywordCell.textContent = item.keyword;
-                row.appendChild(keywordCell);
-
                 let idPurchaseCell = document.createElement('td');
                 idPurchaseCell.setAttribute('data-id_purchase', item.url);
                 idPurchaseCell.textContent = item.url;
@@ -160,11 +152,6 @@ function start(){
                 mainNamePurchaseCell.textContent = item.main_name_purchase;
                 row.appendChild(mainNamePurchaseCell);
 
-                let namePurchaseCell = document.createElement('td');
-                namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
-                namePurchaseCell.textContent = item.name_purchase;
-                row.appendChild(namePurchaseCell);
-
                 let priceCell = document.createElement('td');
                 priceCell.setAttribute('data-price', item.price);
                 priceCell.textContent = item.price;
@@ -173,6 +160,18 @@ function start(){
                 tableZaku.row.add(row);
             });
             tableZaku.draw();
+        }
+    });
+}
+
+function completeFunctionAll(){
+    $.ajax({
+        url: "/complete_all_zaku/",
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            table.clear();
+            table.draw();
         }
     });
 }
