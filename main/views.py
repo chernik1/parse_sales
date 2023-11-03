@@ -190,6 +190,7 @@ def form_data_zaku(request):
             'main_name_purchase': item['main_name_purchase'],
             'name_purchase': item['name_purchase'],
             'price': item['price'],
+            'location': item['location'],
         })
 
     context = {
@@ -229,6 +230,7 @@ def complete_zaku(request):
                 'main_name_purchase': item.main_name_purchase,
                 'name_purchase': item.name_purchase,
                 'price': item.price,
+                'location': item.location,
             })
         context = {
             'parser_zaku': table_for_json,
