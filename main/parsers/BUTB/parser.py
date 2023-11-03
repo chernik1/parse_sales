@@ -79,6 +79,12 @@ async def parse_a_href(page: Page) -> tuple[Page, list]:
     payer_account_num_text = payer_account_num_all_span[1].text
     list_of_objects.append(payer_account_num_text)
 
+    location = soup(text='Место нахождения')
+    location_tr = location[0].find_parent('tr')
+    location_all_span = location_tr.find_all('span')
+    location_text = location_all_span[1].text
+    list_of_objects.append(location_text)
+
     return (page, list_of_objects)
 
 

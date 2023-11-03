@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import sys
 import main.parsers.BUTB.parser as butb
 import main.parsers.goszakupki.zaku as zaku
+from main.ai_assistent.run import run_ai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
@@ -33,6 +34,7 @@ def form_data(request):
                 new_name_purchase = element[new_keyword][digit][3]
                 new_price = element[new_keyword][digit][4]
                 new_payer_number = element[new_keyword][digit][5]
+                new_location = element[new_keyword][digit][6]
                 new_id = generate_unique_id()
 
                 if ParserDelete.objects.filter(id_purchase=new_id_purchase).exists():
@@ -48,6 +50,7 @@ def form_data(request):
                                           price=new_price,
                                           payer_number=new_payer_number,
                                           id=new_id,
+                                          location=new_location,
                                           )
 
                     parser_for_json.append({
@@ -57,7 +60,8 @@ def form_data(request):
                                  'name_purchase': new_name_purchase,
                                  'date': new_date,
                                  'price': new_price,
-                                 'payer_number': new_payer_number
+                                 'payer_number': new_payer_number,
+                                 'location': new_location,
                                 })
 
         else:
@@ -175,6 +179,7 @@ def form_data_zaku(request):
             main_name_purchase=item['main_name_purchase'],
             name_purchase=item['name_purchase'],
             price=item['price'],
+            location=item['location'],
         )
 
         parser_zaku_for_json.append({
@@ -239,4 +244,12 @@ def complete_all_zaku(request):
                 url=item.url,
             )
             item.delete()
+        return JsonResponse('ok', safe=False)
+
+@csrf_exempt
+def ai_start(request):
+    if request.method == 'GET':
+
+        data_for_ai = run_ai(ParserZaku.objects.all())
+
         return JsonResponse('ok', safe=False)

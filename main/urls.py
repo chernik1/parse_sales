@@ -11,4 +11,5 @@ urlpatterns = [
     path('delete_all_zaku/', views.delete_all_zaku, name='delete_all_zaku'),
     path('complete_zaku/', views.complete_zaku, name='complete_zaku'),
     path('complete_all_zaku/', views.complete_all_zaku, name='complete_all_zaku'),
+    path('ai_start/', views.ai_start, name='ai_start'),
 ]

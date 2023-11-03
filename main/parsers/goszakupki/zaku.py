@@ -51,6 +51,7 @@ async def parse_url(page, url, keyword):
 
 
     price = soup.find(string='Общая ориентировочная стоимость закупки').find_parent('tr').find_all('td')[0].text
+    location = soup.find(string='Место нахождения организации').find_parent('tr').find_all('td')[0].text
 
     list_purchase = []
     all_purchase = soup.find_all('td', class_='lot-description')
@@ -65,7 +66,8 @@ async def parse_url(page, url, keyword):
         'payer_number': payer_number,
         'main_name_purchase': main_name_purchase,
         'price': price,
-        'name_purchase': name_purchase
+        'name_purchase': name_purchase,
+        'location': location,
     })
 
     return page
