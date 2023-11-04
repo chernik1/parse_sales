@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 import sys
 import main.parsers.BUTB.parser as butb
 import main.parsers.goszakupki.zaku as zaku
-from main.ai_assistent.run import run_ai
+# from main.ai_assistent.run import run_ai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
