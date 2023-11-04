@@ -79,11 +79,11 @@ async def parse_a_href(page: Page) -> tuple[Page, list]:
     payer_account_num_text = payer_account_num_all_span[1].text
     list_of_objects.append(payer_account_num_text)
 
-    # location = soup(text='Место нахождения')
-    # location_tr = location[0].find_parent('tr')
-    # location_all_span = location_tr.find_all('span')
-    # location_text = location_all_span[1].text
-    # list_of_objects.append(location_text)
+    location = soup(text='Место нахождения')
+    location_tr = location[0].find_parent('tr')
+    location_all_span = location_tr.find_all('span')
+    location_text = location_all_span[1].text
+    list_of_objects.append(location_text)
 
     return (page, list_of_objects)
 
@@ -95,8 +95,8 @@ async def step(page: Page, keyword: str) -> Page:
 
     await page.goto("https://zakupki.butb.by/auctions/reestrauctions.html")
     await page.get_by_role("link", name="Раскрыть форму поиска").click()
-    await page.locator("input[name=\"fra\\:j_idt174\"]").click()
-    await page.locator("input[name=\"fra\\:j_idt174\"]").fill(keyword)
+    await page.locator("input[name=\"fra\\:j_idt201\"]").click()
+    await page.locator("input[name=\"fra\\:j_idt201\"]").fill(keyword)
     await page.locator("input[name=\"fra\\:date1\"]").click()
     await page.locator("input[name=\"fra\\:date1\"]").fill(yesterday)
     await page.locator("input[name=\"fra\\:date2\"]").click()
