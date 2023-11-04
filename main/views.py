@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 import sys
 import main.parsers.BUTB.parser as butb
 import main.parsers.goszakupki.zaku as zaku
-# from main.ai_assistent.run import run_ai
+from main.ai_assistent.run import run_ai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
@@ -251,7 +251,7 @@ def complete_all_zaku(request):
 @csrf_exempt
 def ai_start(request):
     if request.method == 'GET':
-
-        data_for_ai = run_ai(ParserZaku.objects.all())
+        db_zaku = ParserZaku.objects.all()
+        data_for_ai = run_ai(db_zaku)
 
         return JsonResponse('ok', safe=False)
