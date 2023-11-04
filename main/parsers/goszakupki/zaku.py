@@ -23,7 +23,10 @@ async def form_main_name_purchase(soup):
     td_all_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')
     for index, tr_element in enumerate(tr_all_name_purchase):
         text = tr_element.text.strip()
-        if 'Название процедуры закупки' in text:
+        if 'Название процедуры закупки из одного источника' in text:
+            main_name_purchase = td_all_name_purchase[index].text
+            return main_name_purchase, soup
+        elif 'Название процедуры закупки' in text:
             main_name_purchase = td_all_name_purchase[index + 1].text
             return main_name_purchase, soup
         elif 'Название запроса ценовых предложений' in text:

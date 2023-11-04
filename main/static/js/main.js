@@ -176,7 +176,7 @@ function deleteAllFunction() {
 
 document.getElementById('start-button').addEventListener('click', function() {
     $.ajax({
-        url: 'data/',
+        url: '/data/',
         type: 'GET',
         success: function(response) {
             let table = $('#table').DataTable();
