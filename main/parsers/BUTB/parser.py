@@ -5,10 +5,12 @@ from bs4 import BeautifulSoup
 from pprint import pprint
 import asyncio
 from threading import Thread
+from main.models import ParserDelete
 
 today, yesterday = settings.Settings().date_date()
 keywords = settings.Settings().get_keywords()
 
+id_purchase_list = []
 
 list_of_keywords = []
 
@@ -27,12 +29,22 @@ async def check_page(page: Page) -> tuple[Page, list]:
 
         html_content = await page.content()
         soup = BeautifulSoup(html_content, 'html.parser')
-        a_href_page_find = soup.find(id='fra:auctionList:tbody')
-        if a_href_page_find is None:
+        tdoby_page_find = soup.find(id='fra:auctionList:tbody')
+        if tdoby_page_find is None:
             return (page, [])
-        a_href_page_find = a_href_page_find.find_all('a')
 
-        return (page, a_href_page_find)
+        a_href_page_find = tdoby_page_find.find_all('a')
+        tr_find_all = tdoby_page_find.find_all('tr')
+
+        new_a_href_page_find = []
+
+        for tr, a in zip(tr_find_all, a_href_page_find):
+
+            if str(tr.find_all('td')[0].text.split()[0].replace('-', '')) in id_purchase_list:
+                continue
+            new_a_href_page_find.append(a)
+
+        return (page, new_a_href_page_find)
 
     return (page, [])
 
@@ -151,6 +163,11 @@ async def run() -> list[dict[str, list[any]]]:
     return result
 
 def run_programm():
+    global id_purchase_list
+
+    db = ParserDelete.objects.all()
+    id_purchase_list = [obj.id_purchase for obj in db]
+
     def run_async_code():
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)

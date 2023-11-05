@@ -9,8 +9,11 @@ from urllib.parse import urlencode
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 from threading import Thread
+from main.models import ParserZakuDelete
 
 list_result = []
+
+url_list = []
 
 MIN_PRICE = 5000
 MIN_PRICE_PAGE = 1000
@@ -91,6 +94,9 @@ async def parse_page(page, keyword):
 
         a_url = a_href['href']
 
+        if a_url in url_list:
+            continue
+
         page = await parse_url(page, a_url, keyword)
 
     return page
@@ -154,8 +160,12 @@ async def watchdog_goszakupki(from_date, to_date):
         await browser.close()
 
 def run_programm():
+    global url_list
+    data_was_deleted_urls = ParserZakuDelete.objects.all()
+    url_list = [obj.url for obj in data_was_deleted_urls]
+
     today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=1)
+    yesterday = today - datetime.timedelta(days=2)
 
     def run_async_code():
         loop = asyncio.new_event_loop()
