@@ -4,7 +4,9 @@ from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
 
 @admin.register(Parser)
 class ParserAdmin(admin.ModelAdmin):
-    list_display = ('keyword', 'name_company', 'name_purchase', 'date', 'price', 'payer_number')
+    list_display = ('keyword', 'name_company', 'name_purchase',
+                    'date', 'price', 'payer_number',
+                    'location', 'forecast')
 
     actions = ['delete_parser_data']
 
@@ -18,7 +20,9 @@ class ParserDeleteAdmin(admin.ModelAdmin):
 
 @admin.register(ParserZaku)
 class ParserZakuAdmin(admin.ModelAdmin):
-    list_display = ['keyword', 'url', 'name_company', 'name_purchase', 'main_name_purchase', 'name_purchase', 'price']
+    list_display = ['keyword', 'url', 'name_company', 'name_purchase',
+                    'main_name_purchase', 'name_purchase', 'price',
+                    'location', 'forecast']
 
 @admin.register(ParserZakuDelete)
 class ParserZakuDeleteAdmin(admin.ModelAdmin):

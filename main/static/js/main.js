@@ -13,6 +13,7 @@ $(document).ready(function() {
         {title: "Предмет"},
         {title: "Дата"},
         {title: "Цена"},
+        {title: "Прогноз"},
     ],
     dom: 'Bfrtip',
     select: {
@@ -61,6 +62,50 @@ $(document).ready(function() {
     ]
 });
 
+function step(item){
+
+    let row = document.createElement('tr');
+
+    let idPurchaseCell = document.createElement('td');
+    idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
+    idPurchaseCell.textContent = item.id_purchase;
+    row.appendChild(idPurchaseCell);
+
+    let nameCompanyCell = document.createElement('td');
+    nameCompanyCell.setAttribute('data-name_company', item.name_company);
+    nameCompanyCell.textContent = item.name_company;
+    row.appendChild(nameCompanyCell);
+
+    let namePurchaseCell = document.createElement('td');
+    namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
+    namePurchaseCell.textContent = item.name_purchase;
+    row.appendChild(namePurchaseCell);
+
+    let dateCell = document.createElement('td');
+    dateCell.setAttribute('data-date', item.date);
+    dateCell.textContent = item.date;
+    row.appendChild(dateCell);
+
+    let priceCell = document.createElement('td');
+    priceCell.setAttribute('data-price', item.price);
+    priceCell.textContent = item.price;
+    row.appendChild(priceCell);
+
+    let payerNumberCell = document.createElement('td');
+    payerNumberCell.setAttribute('data-payer-number', item.payer_number);
+    payerNumberCell.textContent = item.payer_number;
+    row.appendChild(payerNumberCell);
+
+    let forecastCell = document.createElement('td');
+    forecastCell.setAttribute('data-forecast', item.forecast);
+    forecastCell.textContent = item.forecast;
+    row.appendChild(forecastCell);
+
+    return row;
+
+}
+
+
 function completeFunction(id_list){
    $.ajax({
         url: "/complete/",
@@ -72,37 +117,7 @@ function completeFunction(id_list){
         success: function(response) {
             table.clear();
             response.parser.forEach(function(item) {
-                let row = document.createElement('tr');
-
-                let idPurchaseCell = document.createElement('td');
-                idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
-                idPurchaseCell.textContent = item.id_purchase;
-                row.appendChild(idPurchaseCell);
-
-                let nameCompanyCell = document.createElement('td');
-                nameCompanyCell.setAttribute('data-name_company', item.name_company);
-                nameCompanyCell.textContent = item.name_company;
-                row.appendChild(nameCompanyCell);
-
-                let namePurchaseCell = document.createElement('td');
-                namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
-                namePurchaseCell.textContent = item.name_purchase;
-                row.appendChild(namePurchaseCell);
-
-                let dateCell = document.createElement('td');
-                dateCell.setAttribute('data-date', item.date);
-                dateCell.textContent = item.date;
-                row.appendChild(dateCell);
-
-                let priceCell = document.createElement('td');
-                priceCell.setAttribute('data-price', item.price);
-                priceCell.textContent = item.price;
-                row.appendChild(priceCell);
-
-                let payerNumberCell = document.createElement('td');
-                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
-                payerNumberCell.textContent = item.payer_number;
-                row.appendChild(payerNumberCell);
+                row = step(item);
 
                 table.row.add(row);
             });
@@ -123,40 +138,11 @@ function deleteFunction(id_list) {
             table.clear().draw();
 
             response.parser.forEach(function(item) {
-                let row = document.createElement('tr');
+                row = step(item);
 
-                let idPurchaseCell = document.createElement('td');
-                idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
-                idPurchaseCell.textContent = item.id_purchase;
-                row.appendChild(idPurchaseCell);
-
-                let nameCompanyCell = document.createElement('td');
-                nameCompanyCell.setAttribute('data-name_company', item.name_company);
-                nameCompanyCell.textContent = item.name_company;
-                row.appendChild(nameCompanyCell);
-
-                let namePurchaseCell = document.createElement('td');
-                namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
-                namePurchaseCell.textContent = item.name_purchase;
-                row.appendChild(namePurchaseCell);
-
-                let dateCell = document.createElement('td');
-                dateCell.setAttribute('data-date', item.date);
-                dateCell.textContent = item.date;
-                row.appendChild(dateCell);
-
-                let priceCell = document.createElement('td');
-                priceCell.setAttribute('data-price', item.price);
-                priceCell.textContent = item.price;
-                row.appendChild(priceCell);
-
-                let payerNumberCell = document.createElement('td');
-                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
-                payerNumberCell.textContent = item.payer_number;
-                row.appendChild(payerNumberCell);
-
-                table.row.add(row).draw();
+                table.row.add(row);
             });
+            table.draw();
         },
     });
 }
@@ -177,48 +163,19 @@ function deleteAllFunction() {
 document.getElementById('start-button').addEventListener('click', function() {
     $.ajax({
         url: '/data/',
-        type: 'GET',
+        type: 'POST',
         success: function(response) {
             let table = $('#table').DataTable();
             table.clear();
 
             response.parser.forEach(function(item) {
-                let row = document.createElement('tr');
-
-                let idPurchaseCell = document.createElement('td');
-                idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
-                idPurchaseCell.textContent = item.id_purchase;
-                row.appendChild(idPurchaseCell);
-
-                let nameCompanyCell = document.createElement('td');
-                nameCompanyCell.setAttribute('data-name_company', item.name_company);
-                nameCompanyCell.textContent = item.name_company;
-                row.appendChild(nameCompanyCell);
-
-                let payerNumberCell = document.createElement('td');
-                payerNumberCell.setAttribute('data-payer-number', item.payer_number);
-                payerNumberCell.textContent = item.payer_number;
-                row.appendChild(payerNumberCell);
-
-                let namePurchaseCell = document.createElement('td');
-                namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
-                namePurchaseCell.textContent = item.name_purchase;
-                row.appendChild(namePurchaseCell);
-
-                let dateCell = document.createElement('td');
-                dateCell.setAttribute('data-date', item.date);
-                dateCell.textContent = item.date;
-                row.appendChild(dateCell);
-
-                let priceCell = document.createElement('td');
-                priceCell.setAttribute('data-price', item.price);
-                priceCell.textContent = item.price;
-                row.appendChild(priceCell);
+                row = step(item);
 
                 table.row.add(row);
             });
 
             table.draw();
+
         }
     });
 });

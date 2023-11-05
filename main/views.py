@@ -51,6 +51,7 @@ def form_data(request):
                                           payer_number=new_payer_number,
                                           id=new_id,
                                           location=new_location,
+                                          forecast='Нету',
                                           )
 
                     parser_for_json.append({
@@ -61,7 +62,7 @@ def form_data(request):
                                  'date': new_date,
                                  'price': new_price,
                                  'payer_number': new_payer_number,
-                                 'location': new_location,
+                                 'forecast': 'Нету',
                                 })
 
         else:
@@ -100,6 +101,7 @@ def delete(request):
                 'date':  item.date,
                 'price':  item.price,
                 'payer_number':  item.payer_number,
+                'forecast':  item.forecast,
             })
         context = {
             'parser': table_for_json,
@@ -149,6 +151,7 @@ def complete(request):
                 'date': item.date,
                 'price': item.price,
                 'payer_number': item.payer_number,
+                'forecast': item.forecast,
             })
         context = {
             'parser': table_for_json,
@@ -180,6 +183,7 @@ def form_data_zaku(request):
             name_purchase=item['name_purchase'],
             price=item['price'],
             location=item['location'],
+            forecast='Нету',
         )
 
         parser_zaku_for_json.append({
@@ -191,6 +195,7 @@ def form_data_zaku(request):
             'name_purchase': item['name_purchase'],
             'price': item['price'],
             'location': item['location'],
+            'forecast': 'Нету',
         })
 
     context = {
@@ -231,6 +236,7 @@ def complete_zaku(request):
                 'name_purchase': item.name_purchase,
                 'price': item.price,
                 'location': item.location,
+                'forecast': item.forecast,
             })
         context = {
             'parser_zaku': table_for_json,

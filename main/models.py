@@ -20,6 +20,7 @@ class Parser(models.Model):
     price = models.CharField(max_length=10000, default='')
     payer_number = models.CharField(max_length=10000, default='')
     location = models.CharField(max_length=10000, default='')
+    forecast = models.CharField(max_length=4, default='Нету')
 
     def __str__(self):
         return f'{self.keyword} - {self.name_purchase}'
@@ -35,6 +36,7 @@ class ParserZaku(models.Model):
     payer_number = models.CharField(max_length=10000, default='')
     price = models.CharField(max_length=10000, default='')
     location = models.CharField(max_length=10000, default='')
+    forecast = models.CharField(max_length=4, default='Нету')
 
     def __str__(self):
         return f'{self.keyword} - {self.name_purchase}'

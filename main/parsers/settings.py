@@ -10,7 +10,7 @@ class Settings:
 
     def date_date(self) -> tuple[str, str]:
         today = datetime.date.today()
-        yesterday = today - datetime.timedelta(days=2)
+        yesterday = today - datetime.timedelta(days=4)
         formatted_today = today.strftime("%d.%m.%Y")
         formatted_yesterday = yesterday.strftime("%d.%m.%Y")
         return (formatted_today, formatted_yesterday)
