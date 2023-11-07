@@ -1,5 +1,17 @@
 from .settings import combined_request
 import g4f
+from g4f.Provider import (
+    AItianhu,
+    Aichat,
+    Bard,
+    Bing,
+    ChatBase,
+    ChatgptAi,
+    OpenaiChat,
+    Vercel,
+    You,
+    Yqcloud,
+)
 
 def run_ai(data):
     for i in range(4, 15):
@@ -10,9 +22,9 @@ def run_ai(data):
         print(request)
         try:
             response = g4f.ChatCompletion.create(
-                model="gpt-4",
+                model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": request}],
-                provider=g4f.Provider.Bing,
+                provider=g4f.Provider.ChatgptAi,
                 stream=True,
             )
         except Exception as e:
