@@ -165,7 +165,7 @@ def run_programm():
     url_list = [obj.url for obj in data_was_deleted_urls]
 
     today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=4)
+    yesterday = today - datetime.timedelta(days=1)
 
     def run_async_code():
         loop = asyncio.new_event_loop()

@@ -17,21 +17,30 @@ def run_ai(data):
     for i in range(4, 15):
         element = data[i]
         print(element.price, element.main_name_purchase, element.location)
-        request = combined_request + element.location + ' + ' + element.main_name_purchase + ' + ' + element.price + 'Ответ 1 символ + или -'
+        request = combined_request + element.location + ' , ' + element.main_name_purchase + ' , ' + element.price
         # Set the provider
         print(request)
         try:
             response = g4f.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4",
                 messages=[{"role": "user", "content": request}],
-                provider=g4f.Provider.ChatgptAi,
+                provider=g4f.Provider.Bing,
                 stream=True,
+                temperature=0.8,
             )
         except Exception as e:
             response = ['None']
         s = ''
         for i in response:
             s += i
-        print(s)
+
+        if '+' in s:
+            print('Купить')
+        elif '-' in s:
+            print('Не купить')
+        elif 'None' in s:
+            print('None')
+        else:
+            print('A')
 
 
