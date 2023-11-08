@@ -79,11 +79,14 @@ async def parse_a_href(page: Page) -> tuple[Page, list]:
     list_of_objects.append(name_purchase_text)
 
     price = soup(text='Ориентировочная стоимость закупки')
-    price_tr = price[0].find_parent('tr')
-    price_all_span = price_tr.find_all('span')
-    price_text = price_all_span[1].text
-    price_text = price_text.replace("\xa0", "").replace("\\xa", "")
-    list_of_objects.append(price_text)
+    if len(price) == 0:
+        list_of_objects.append('Неизвестно')
+    else:
+        price_tr = price[0].find_parent('tr')
+        price_all_span = price_tr.find_all('span')
+        price_text = price_all_span[1].text
+        price_text = price_text.replace("\xa0", "").replace("\\xa", "")
+        list_of_objects.append(price_text)
 
     payer_account_num = soup(text='УНП')
     payer_account_num_tr = payer_account_num[1].find_parent('tr')
