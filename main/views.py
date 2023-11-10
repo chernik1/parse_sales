@@ -260,6 +260,22 @@ def ai_start(request):
 
         from main.ai_assistent.run import run_ai
 
-        data_for_ai = run_ai(db_zaku)
+        new_db_zaku = run_ai(db_zaku)
+
+        for element in new_db_zaku:
+            if ParserZaku.objects.filter(url=element['url']).exists():
+                ParserZaku.objects.filter(url=element['url']).delete()
+
+                ParserZaku.objects.create(
+                    keyword=element['keyword'],
+                    url=element['url'],
+                    name_company=element['name_company'],
+                    payer_number=element['payer_number'],
+                    main_name_purchase=element['main_name_purchase'],
+                    name_purchase=element['name_purchase'],
+                    price=element['price'],
+                    location=element['location'],
+                    forecast=element['forecast'],
+                )
 
         return JsonResponse('ok', safe=False)

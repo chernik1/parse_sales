@@ -59,6 +59,13 @@ $(document).ready(function() {
                 start();
             }
         },
+        {
+            text: 'Старт ИИ',
+            className: 'button-tabla-start_ai',
+            action: function (e, dt, node, config){
+                startAi();
+            }
+        },
     ]
 });
 
@@ -98,6 +105,24 @@ function step(item){
 
     return row;
 
+}
+
+function startAi(){
+    $.ajax({
+        url: "/ai_start/",
+        type: "GET",
+        success: function(response) {
+            let tableZaku = $('#table-zaku').DataTable();
+            tableZaku.clear();
+            response.parser_zaku.forEach(function(item) {
+
+                row = step(item);
+
+                tableZaku.row.add(row);
+            });
+            tableZaku.draw();
+        }
+    });
 }
 
 function completeFunction(id_list){
