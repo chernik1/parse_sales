@@ -6,8 +6,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
 import uuid
-from time import sleep
-import asyncio
 
 
 # Create your views here.
@@ -255,12 +253,12 @@ def complete_all_zaku(request):
 
 @csrf_exempt
 def ai_start(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         db_zaku = ParserZaku.objects.all()
 
-        from main.ai_assistent.run import run_ai
+        from main.ai_assistent.run_zaku import run_programm
 
-        new_db_zaku = run_ai(db_zaku)
+        new_db_zaku = run_programm(db_zaku)
 
         for element in new_db_zaku:
             if ParserZaku.objects.filter(url=element['url']).exists():

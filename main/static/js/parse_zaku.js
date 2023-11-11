@@ -110,7 +110,7 @@ function step(item){
 function startAi(){
     $.ajax({
         url: "/ai_start/",
-        type: "GET",
+        type: "POST",
         success: function(response) {
             let tableZaku = $('#table-zaku').DataTable();
             tableZaku.clear();
