@@ -24,7 +24,7 @@ $(document).ready(function() {
     buttons: [
         {
             text: 'Delete',
-            className: 'button-table-delete',
+            className: 'button-table',
             action: function (e, dt, node, config) {
                 let selectedIds = [];
                 let selectedRows = dt.rows({selected: true}).nodes();
@@ -38,14 +38,14 @@ $(document).ready(function() {
         },
         {
             text: 'Delete all',
-            className: 'button-table-delete-all',
+            className: 'button-table',
             action: function (e, dt, node, config) {
                 deleteAllFunction();
             }
         },
         {
             text: 'Завершить',
-            className: 'button-table-complete',
+            className: 'button-table',
             action: function (e, dt, node, config){
 
                 let selectedIds = [];
@@ -56,9 +56,22 @@ $(document).ready(function() {
                     selectedIds.push(rowId);
                 });
                 completeFunction(selectedIds);
-
             }
-        }
+        },
+        {
+            text: 'Старт',
+            className: 'button-table',
+            action: function (e, dt, node, config){
+                start();
+            }
+        },
+        {
+            text: 'Старт ИИ',
+            className: 'button-table',
+            action: function (e, dt, node, config){
+                startAi();
+            }
+        },
     ]
 });
 
@@ -126,6 +139,24 @@ function completeFunction(id_list){
     });
 };
 
+function startAi(){
+    $.ajax({
+        url: "/ai_start/",
+        type: "POST",
+        success: function(response) {
+            let table = $('#table').DataTable();
+            table.clear();
+            response.parser.forEach(function(item) {
+
+                row = step(item);
+
+                table.row.add(row);
+            });
+            table.draw();
+        }
+    });
+}
+
 function deleteFunction(id_list) {
     $.ajax({
         url: "/delete/",
@@ -160,7 +191,7 @@ function deleteAllFunction() {
 }
 
 
-document.getElementById('start-button').addEventListener('click', function() {
+function start() {
     $.ajax({
         url: '/data/',
         type: 'POST',
@@ -178,7 +209,7 @@ document.getElementById('start-button').addEventListener('click', function() {
 
         }
     });
-});
+}
 
 
 
