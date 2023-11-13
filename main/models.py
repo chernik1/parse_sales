@@ -11,7 +11,6 @@ class ParserDelete(models.Model):
 
 class Parser(models.Model):
 
-    id = models.CharField(max_length=100, primary_key=True)
     keyword = models.CharField(max_length=10000, default='')
     id_purchase = models.CharField(max_length=10000, default='')
     name_company = models.CharField(max_length=10000, default='')

@@ -2,7 +2,7 @@ import asyncio
 from threading import Thread
 import g4f
 from .settings import combined_request
-from time import sleep
+
 db = []
 
 async def run_ai(data):

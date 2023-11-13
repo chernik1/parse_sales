@@ -10,9 +10,6 @@ import uuid
 
 # Create your views here.
 
-def generate_unique_id():
-    print(uuid.uuid4())
-    return str(uuid.uuid4())
 
 @csrf_exempt
 def form_data(request):
@@ -32,12 +29,11 @@ def form_data(request):
                 new_price = element[new_keyword][digit][4]
                 new_payer_number = element[new_keyword][digit][5]
                 new_location = element[new_keyword][digit][6]
-                new_id = generate_unique_id()
 
                 if ParserDelete.objects.filter(id_purchase=new_id_purchase).exists():
                     continue
 
-                if not Parser.objects.filter(id=new_id).exists():
+                if not Parser.objects.filter(id_purchase=new_id_purchase).exists():
                     Parser.objects.create(
                                           keyword=new_keyword,
                                           id_purchase=new_id_purchase,
@@ -46,7 +42,6 @@ def form_data(request):
                                           date=new_date,
                                           price=new_price,
                                           payer_number=new_payer_number,
-                                          id=new_id,
                                           location=new_location,
                                           forecast='Нету',
                                           )
@@ -62,13 +57,6 @@ def form_data(request):
                                  'forecast': 'Нету',
                                 })
 
-        else:
-            if not Parser.objects.filter(keyword=new_keyword).exists():
-                new_id = generate_unique_id()
-                Parser.objects.create(
-                    keyword=new_keyword,
-                    id=new_id,
-                )
     context = {
         'parser': parser_for_json,
     }
@@ -260,6 +248,8 @@ def ai_start(request):
 
         new_db_zaku = run_programm(db_zaku)
 
+        parser_zaku = []
+
         for element in new_db_zaku:
             if ParserZaku.objects.filter(url=element['url']).exists():
                 ParserZaku.objects.filter(url=element['url']).delete()
@@ -276,4 +266,61 @@ def ai_start(request):
                     forecast=element['forecast'],
                 )
 
-        return JsonResponse('ok', safe=False)
+                parser_zaku.append({
+                    'keyword': element['keyword'],
+                    'id_purchase': element['id_purchase'],
+                    'name_company': element['name_company'],
+                    'payer_number': element['payer_number'],
+                    'date': element['date'],
+                    'name_purchase': element['name_purchase'],
+                    'price': element['price'],
+                    'location': element['location'],
+                    'forecast': element['forecast'],
+                })
+
+        return JsonResponse(parser_zaku, safe=False)
+
+@csrf_exempt
+def ai_start_butb(request):
+    if request.method == 'POST':
+        db = Parser.objects.all()
+
+        from main.ai_assistent.run_butb import run_programm
+
+        new_db = run_programm(db)
+
+        parser = []
+
+        for element in new_db:
+            if Parser.objects.filter(id_purchase=element['id_purchase']).exists():
+                Parser.objects.filter(id_purchase=element['id_purchase']).delete()
+
+                Parser.objects.create(
+                    keyword=element['keyword'],
+                    id_purchase=element['id_purchase'],
+                    name_company=element['name_company'],
+                    payer_number=element['payer_number'],
+                    date=element['date'],
+                    name_purchase=element['name_purchase'],
+                    price=element['price'],
+                    location=element['location'],
+                    forecast=element['forecast'],
+                )
+
+                parser.append({
+                    'keyword': element['keyword'],
+                    'id_purchase': element['id_purchase'],
+                    'name_company': element['name_company'],
+                    'payer_number': element['payer_number'],
+                    'date': element['date'],
+                    'name_purchase': element['name_purchase'],
+                    'price': element['price'],
+                    'location': element['location'],
+                    'forecast': element['forecast'],
+                })
+
+        context = {
+            'parser': parser,
+        }
+
+        return JsonResponse(parser, safe=False)

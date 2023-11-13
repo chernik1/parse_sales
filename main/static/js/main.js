@@ -1,7 +1,6 @@
 
 $(document).ready(function() {
 
-
   let table = $('#table').DataTable({
     "pageLength": 100,
     "order": [[0, 'asc']],
@@ -139,23 +138,6 @@ function completeFunction(id_list){
     });
 };
 
-function startAi(){
-    $.ajax({
-        url: "/ai_start/",
-        type: "POST",
-        success: function(response) {
-            let table = $('#table').DataTable();
-            table.clear();
-            response.parser.forEach(function(item) {
-
-                row = step(item);
-
-                table.row.add(row);
-            });
-            table.draw();
-        }
-    });
-}
 
 function deleteFunction(id_list) {
     $.ajax({
@@ -212,7 +194,22 @@ function start() {
 }
 
 
+function startAi(){
+    $.ajax({
+        url: "/ai_start_butb/",
+        type: "POST",
+        success: function(response) {
+            table.clear();
+            response.parser.forEach(function(item) {
 
+                row = step(item);
+
+                table.row.add(row);
+            });
+            table.draw();
+        }
+    });
+}
 
 });
 
