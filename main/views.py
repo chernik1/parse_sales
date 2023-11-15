@@ -278,7 +278,11 @@ def ai_start(request):
                     'forecast': element['forecast'],
                 })
 
-        return JsonResponse(parser_zaku, safe=False)
+        context = {
+            'parser_zaku': parser_zaku,
+        }
+
+        return JsonResponse(context, safe=False)
 
 @csrf_exempt
 def ai_start_butb(request):
@@ -323,4 +327,4 @@ def ai_start_butb(request):
             'parser': parser,
         }
 
-        return JsonResponse(parser, safe=False)
+        return JsonResponse(context, safe=False)
