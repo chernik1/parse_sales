@@ -268,21 +268,21 @@ def ai_start(request):
 
                 parser_zaku.append({
                     'keyword': element['keyword'],
-                    'id_purchase': element['id_purchase'],
+                    'url': element['url'],
                     'name_company': element['name_company'],
                     'payer_number': element['payer_number'],
-                    'date': element['date'],
+                    'main_name_purchase': element['main_name_purchase'],
                     'name_purchase': element['name_purchase'],
                     'price': element['price'],
                     'location': element['location'],
                     'forecast': element['forecast'],
                 })
 
-        context = {
+    context = {
             'parser_zaku': parser_zaku,
         }
 
-        return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False)
 
 @csrf_exempt
 def ai_start_butb(request):

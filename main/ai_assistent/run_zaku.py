@@ -2,6 +2,7 @@ import asyncio
 from threading import Thread
 import g4f
 from .settings import combined_request
+from .validate import is_validate
 
 db = []
 
@@ -10,7 +11,25 @@ async def run_ai(data):
     for index, element in enumerate(data):
         print(element.price, element.main_name_purchase, element.location)
         promt = combined_request + element.location + ' , ' + element.main_name_purchase + ' , ' + element.price + "Напиши свой ответ без объяснений в виде **+** или **-** или **A**."
-        # Set the provider
+
+        if not is_validate(element):
+
+            new_db_zaku.append(
+                {
+                    'keyword': element.keyword,
+                    'url': element.url,
+                    'name_company': element.name_company,
+                    'payer_number': element.payer_number,
+                    'main_name_purchase': element.main_name_purchase,
+                    'name_purchase': element.name_purchase,
+                    'price': element.price,
+                    'location': element.location,
+                    'forecast': 'Проверка не пройдена',
+                }
+            )
+
+            continue
+
         print(promt)
         try:
             response = await g4f.ChatCompletion.create_async(
