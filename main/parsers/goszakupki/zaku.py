@@ -18,7 +18,6 @@ url_list = []
 MIN_PRICE = 5000
 MIN_PRICE_PAGE = 1000
 
-today, yesterday = settings.Settings().date_date()
 keywords = settings.Settings().get_keywords()
 
 async def form_main_name_purchase(soup):
@@ -104,8 +103,8 @@ async def parse_page(page, keyword):
 def get_url_goszakupki(text, from_date, to_date):
     params = {
         'TendersSearch[text]': text,
-        'TendersSearch[created_from]': from_date.strftime("%d.%m.%Y"),
-        'TendersSearch[created_to]': to_date.strftime("%d.%m.%Y")
+        'TendersSearch[created_from]': from_date,
+        'TendersSearch[created_to]': to_date
     }
     return "https://goszakupki.by/tenders/posted?" + urlencode(params)
 
@@ -164,8 +163,8 @@ def run_programm():
     data_was_deleted_urls = ParserZakuDelete.objects.all()
     url_list = [obj.url for obj in data_was_deleted_urls]
 
-    today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=1)
+    today, yesterday = settings.Settings().date_date()
+
 
     def run_async_code():
         loop = asyncio.new_event_loop()

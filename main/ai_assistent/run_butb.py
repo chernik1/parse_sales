@@ -12,21 +12,21 @@ async def create_tasks(data, new_db):
     for index, element in enumerate(data):
         print(element.price, element.name_purchase, element.location)
         promt = combined_request + element.name_purchase
-
-        if not is_validate(element):
-            new_db.append(
-                {
-                    'keyword': element.keyword,
-                    'id_purchase': element.id_purchase,
-                    'name_company': element.name_company,
-                    'payer_number': element.payer_number,
-                    'date': element.date,
-                    'name_purchase': element.name_purchase,
-                    'price': element.price,
-                    'location': element.location,
-                    'forecast': 'Проверка не пройдена',
-                }
-            )
+        #
+        # if not is_validate(element):
+        #     new_db.append(
+        #         {
+        #             'keyword': element.keyword,
+        #             'id_purchase': element.id_purchase,
+        #             'name_company': element.name_company,
+        #             'payer_number': element.payer_number,
+        #             'date': element.date,
+        #             'name_purchase': element.name_purchase,
+        #             'price': element.price,
+        #             'location': element.location,
+        #             'forecast': 'Проверка не пройдена',
+        #         }
+        #     )
 
         print(promt)
         task = asyncio.create_task(make_request(promt))

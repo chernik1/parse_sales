@@ -15,6 +15,7 @@ id_purchase_list = []
 list_of_keywords = []
 
 async def check_page(page: Page) -> tuple[Page, list]:
+    """Функция проверяет страницу на наличие товаров."""
 
     html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -49,6 +50,7 @@ async def check_page(page: Page) -> tuple[Page, list]:
     return (page, [])
 
 async def parse_a_href(page: Page) -> tuple[Page, list]:
+    """Функция для парсинга ссылок на страницы."""
     list_of_objects = []
 
     html_content = await page.content()
@@ -107,6 +109,7 @@ async def parse_a_href(page: Page) -> tuple[Page, list]:
 
 
 async def step(page: Page, keyword: str) -> Page:
+    """Функция перехода на страницу предметов."""
 
     await page.goto("https://zakupki.butb.by/auctions/reestrauctions.html")
     await page.get_by_role("link", name="Раскрыть форму поиска").click()
@@ -121,6 +124,7 @@ async def step(page: Page, keyword: str) -> Page:
     return page
 
 async def run() -> list[dict[str, list[any]]]:
+    """Функция парсинга"""
     global list_of_keywords
     result = []
     async with async_playwright() as playwright:
@@ -166,12 +170,14 @@ async def run() -> list[dict[str, list[any]]]:
     return result
 
 def run_programm():
+    """Функция запуска парсера."""
     global id_purchase_list
 
-    db = ParserDelete.objects.all()
-    id_purchase_list = [obj.id_purchase for obj in db]
+    db: ParserDelete = ParserDelete.objects.all()
+    id_purchase_list: list = [obj.id_purchase for obj in db]
 
-    def run_async_code():
+    def run_async_code() -> list[dict[str, list[any]]]:
+        """Функция для асинхронного запуска парсера."""
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         result = loop.run_until_complete(run())
@@ -183,6 +189,3 @@ def run_programm():
     thread.join()
 
     return list_of_keywords
-
-
-#result = asyncio.get_event_loop().run_until_complete(run(keywords))

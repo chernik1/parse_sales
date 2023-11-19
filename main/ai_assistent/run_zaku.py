@@ -14,21 +14,21 @@ async def create_tasks(data, new_db_zaku):
         #promt = combined_request + element.location + ' , ' + element.main_name_purchase + ' , ' + element.price + ""
         promt = combined_request + element.main_name_purchase + element.name_purchase
 
-        if not is_validate(element):
-            new_db_zaku.append(
-                {
-                    'keyword': element.keyword,
-                    'url': element.url,
-                    'name_company': element.name_company,
-                    'payer_number': element.payer_number,
-                    'main_name_purchase': element.main_name_purchase,
-                    'name_purchase': element.name_purchase,
-                    'price': element.price,
-                    'location': element.location,
-                    'forecast': 'Проверка не пройдена',
-                }
-            )
-            continue
+        # if not is_validate(element):
+        #     new_db_zaku.append(
+        #         {
+        #             'keyword': element.keyword,
+        #             'url': element.url,
+        #             'name_company': element.name_company,
+        #             'payer_number': element.payer_number,
+        #             'main_name_purchase': element.main_name_purchase,
+        #             'name_purchase': element.name_purchase,
+        #             'price': element.price,
+        #             'location': element.location,
+        #             'forecast': 'Проверка не пройдена',
+        #         }
+        #     )
+        #     continue
 
         print(promt)
         task = asyncio.create_task(make_request(promt))
@@ -39,12 +39,16 @@ async def create_tasks(data, new_db_zaku):
 
 async def run_ai(data):
     new_db_zaku = []
+    all_responses = []
 
-    tasks, new_db_zaku = await create_tasks(data, new_db_zaku)
+    data_50_split = [data[i:i+50] for i in range(0, len(data), 50)]
 
-    responses = await asyncio.gather(*tasks)
+    for data_50 in data_50_split:
+        tasks, new_db_zaku = await create_tasks(data_50, new_db_zaku)
+        responses = await asyncio.gather(*tasks)
+        all_responses.append(responses)
 
-    for index, response in enumerate(responses):
+    for index, response in enumerate(all_responses):
         element = data[index]
         s = ''
         for i in response:

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 import sys
-import main.parsers.BUTB.parser as butb
+import main.parsers.BUTB.butb as butb
 import main.parsers.goszakupki.zaku as zaku
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
