@@ -1,19 +1,95 @@
-html {
-    background-color: white;
-}
-
-#start-project #open-project {
+ul {
     text-align: center;
 }
-#start-button {
-    color: grey;
-    padding: 12px 60px;
-    fonz-size: 16px;
-    border-radius: 10%
+
+.dataTables_wrapper table {
+  border-collapse: collapse;
 }
 
-#start-button:hover {
-    background: rgba(105, 105, 105, 0.3);
-    color: rgba(0, 0, 0, 0.3);
-    box-shadow: rgba(0, 0, 0, 0.3);
+.dataTables_wrapper table th,
+.dataTables_wrapper table td {
+  border: 1px solid black;
+  padding: 8px;
+}
+
+
+.dataTables_wrapper .dt-buttons button {
+  margin-left: 20px;
+}
+
+.wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.button-table {
+  display: block;
+  width: 200px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 18px;
+  font-family: sans-serif;
+  text-decoration: none;
+  color: #333;
+  border: 2px solid #333;
+  letter-spacing: 2px;
+  text-align: center;
+  position: relative;
+  transition: all .35s;
+}
+
+.button-table span {
+  position: relative;
+  z-index: 2;
+}
+
+.button-table:after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #ff003b;
+  transition: all .35s;
+}
+
+.button-table:hover {
+  color: #fff;
+}
+
+.button-table:hover:after {
+  width: 100%;
+}
+
+#table {
+    background-color: #f2f2f2;
+    width: 90%;
+}
+#table td {
+    background-color: #f2f2f2;
+}
+
+#table tr.selected td {
+    background-color: rgba(0, 128, 255, 0.3);
+}
+
+.dataTables_filter {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#table-zaku {
+    background-color: #f2f2f2;
+    width: 90%;
+}
+#table-zaku td {
+    background-color: #f2f2f2;
+}
+
+#table-zaku tr.selected td {
+    background-color: rgba(0, 128, 255, 0.3);
 }

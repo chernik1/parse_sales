@@ -54,14 +54,14 @@ $(document).ready(function() {
         },
         {
             text: 'Старт',
-            className: 'button-table-start',
+            className: 'button-table',
             action: function (e, dt, node, config){
                 start();
             }
         },
         {
             text: 'Старт ИИ',
-            className: 'button-tabla-start_ai',
+            className: 'button-table',
             action: function (e, dt, node, config){
                 startAi();
             }
