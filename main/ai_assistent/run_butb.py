@@ -6,11 +6,14 @@ from .validate import is_validate
 
 db = []
 
-async def run_ai(data):
-    new_db = []
-    for index, element in enumerate(data):
+async def create_tasks(data, new_db):
+    tasks = []
 
-        if is_validate(element):
+    for index, element in enumerate(data):
+        print(element.price, element.name_purchase, element.location)
+        promt = combined_request + element.name_purchase
+
+        if not is_validate(element):
             new_db.append(
                 {
                     'keyword': element.keyword,
@@ -25,34 +28,46 @@ async def run_ai(data):
                 }
             )
 
-            continue
-
-        print(element.price, element.name_purchase, element.location)
-        promt = combined_request + element.location + ' , ' + element.name_purchase + ' , ' + element.price + "Напиши свой ответ без объяснений в виде **+** или **-** или **A**. Отвечай как можно бывстрее, без этого мне будет плохо"
-        # Set the provider
         print(promt)
-        try:
-            response = await g4f.ChatCompletion.create_async(
-                model="gpt-3.5-turbo",
-                provider=g4f.Provider.Bing,
-                messages=[{"role": "user", "content": promt}],
-            )
-        except Exception as e:
-            print(e)
-            response = ['None']
+        task = asyncio.create_task(make_request(promt))
+        tasks.append(task)
+
+    return tasks, new_db
+
+async def make_request(promt):
+    try:
+        response = await g4f.ChatCompletion.create_async(
+            model=g4f.models.default,
+            provider=g4f.Provider.Bing,
+            messages=[{"role": "user", "content": promt}],
+        )
+    except Exception as e:
+        print(e)
+        response = ['None']
+    return response
+
+async def run_ai(data):
+    new_db = []
+
+    tasks, new_db = await create_tasks(data, new_db)
+
+    responses = await asyncio.gather(*tasks)
+
+    for index, response in enumerate(responses):
+        element = data[index]
         s = ''
         for i in response:
             s += i
-        print(s)
         s = s.split()
         if '**+**' in s or '+' in s:
             forecast = 'Купить'
         elif '**-**' in s or '-' in s:
             forecast = 'Не купить'
-        elif '**A**' in s or 'A' in s or 'a' in s:
+        elif '**A**' in s or 'A' in s:
             forecast = 'Не знаю'
         else:
             forecast = 'Неопределён'
+        print(s)
 
         new_db.append(
             {
@@ -67,6 +82,7 @@ async def run_ai(data):
                 'forecast': forecast,
             }
         )
+
     return new_db
 
 

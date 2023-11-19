@@ -6,15 +6,13 @@ from .validate import is_validate
 
 db = []
 
-import asyncio
-
-async def run_ai(data):
-    new_db_zaku = []
+async def create_tasks(data, new_db_zaku):
     tasks = []
 
     for index, element in enumerate(data):
         print(element.price, element.main_name_purchase, element.location)
-        promt = combined_request + element.location + ' , ' + element.main_name_purchase + ' , ' + element.price + "Напиши свой ответ БЕЗ ОБЪЯСНЕНИЙ в виде **+** или **-** или **A**."
+        #promt = combined_request + element.location + ' , ' + element.main_name_purchase + ' , ' + element.price + ""
+        promt = combined_request + element.main_name_purchase + element.name_purchase
 
         if not is_validate(element):
             new_db_zaku.append(
@@ -35,6 +33,14 @@ async def run_ai(data):
         print(promt)
         task = asyncio.create_task(make_request(promt))
         tasks.append(task)
+
+    return tasks, new_db_zaku
+
+
+async def run_ai(data):
+    new_db_zaku = []
+
+    tasks, new_db_zaku = await create_tasks(data, new_db_zaku)
 
     responses = await asyncio.gather(*tasks)
 
