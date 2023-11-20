@@ -48,6 +48,8 @@ async def run_ai(data):
         responses = await asyncio.gather(*tasks)
         all_responses.append(responses)
 
+    all_responses = [item for sublist in all_responses for item in sublist]
+
     for index, response in enumerate(all_responses):
         element = data[index]
         s = ''

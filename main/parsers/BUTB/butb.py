@@ -174,7 +174,7 @@ def run_programm():
     global id_purchase_list
 
     db: ParserDelete = ParserDelete.objects.all()
-    id_purchase_list: list = [obj.id_purchase for obj in db]
+    id_purchase_list = [obj.id_purchase for obj in db]
 
     def run_async_code() -> list[dict[str, list[any]]]:
         """Функция для асинхронного запуска парсера."""
