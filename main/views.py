@@ -10,7 +10,6 @@ import uuid
 
 # Create your views here.
 
-
 @csrf_exempt
 def form_data(request):
     parser_for_json = []
