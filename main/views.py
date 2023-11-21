@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
 import uuid
 
-
+#убрать баг в выводе 1 таблицы, ссылка после предмета, рег номер после предмета.
 # Create your views here.
 
 @csrf_exempt

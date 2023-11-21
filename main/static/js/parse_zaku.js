@@ -6,10 +6,10 @@ $(document).ready(function() {
     "order": [[0, 'asc']],
     "ordering": true,
     columns: [
-        {title: "Ссылка"},
         {title: "Имя компании"},
         {title: 'УНП'},
         {title: "Предмет"},
+        {title: "Ссылка"},
         {title: "Цена"},
         {title: "Прогноз"},
     ],

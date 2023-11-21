@@ -6,11 +6,11 @@ $(document).ready(function() {
     "order": [[0, 'asc']],
     "ordering": true,
     columns: [
-        {title: "Регистрационный номер"},
         {title: "Имя компании"},
         {title: 'УНП'},
         {title: "Предмет"},
         {title: "Дата"},
+        {title: "Регистрационный номер"},
         {title: "Цена"},
         {title: "Прогноз"},
     ],
@@ -78,35 +78,39 @@ function step(item){
 
     let row = document.createElement('tr');
 
-    let idPurchaseCell = document.createElement('td');
-    idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
-    idPurchaseCell.textContent = item.id_purchase;
-    row.appendChild(idPurchaseCell);
 
     let nameCompanyCell = document.createElement('td');
     nameCompanyCell.setAttribute('data-name_company', item.name_company);
     nameCompanyCell.textContent = item.name_company;
     row.appendChild(nameCompanyCell);
 
+    let payerNumberCell = document.createElement('td');
+    payerNumberCell.setAttribute('data-payer-number', item.payer_number);
+    payerNumberCell.textContent = item.payer_number;
+    row.appendChild(payerNumberCell);
+
     let namePurchaseCell = document.createElement('td');
     namePurchaseCell.setAttribute('data-name_purchase', item.name_purchase);
     namePurchaseCell.textContent = item.name_purchase;
     row.appendChild(namePurchaseCell);
+
+    let idPurchaseCell = document.createElement('td');
+    idPurchaseCell.setAttribute('data-id_purchase', item.id_purchase);
+    idPurchaseCell.textContent = item.id_purchase;
+    row.appendChild(idPurchaseCell);
+
 
     let dateCell = document.createElement('td');
     dateCell.setAttribute('data-date', item.date);
     dateCell.textContent = item.date;
     row.appendChild(dateCell);
 
+
     let priceCell = document.createElement('td');
     priceCell.setAttribute('data-price', item.price);
     priceCell.textContent = item.price;
     row.appendChild(priceCell);
 
-    let payerNumberCell = document.createElement('td');
-    payerNumberCell.setAttribute('data-payer-number', item.payer_number);
-    payerNumberCell.textContent = item.payer_number;
-    row.appendChild(payerNumberCell);
 
     let forecastCell = document.createElement('td');
     forecastCell.setAttribute('data-forecast', item.forecast);
