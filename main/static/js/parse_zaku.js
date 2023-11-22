@@ -73,11 +73,6 @@ function step(item){
     console.log(item);
     let row = document.createElement('tr');
 
-    let idPurchaseCell = document.createElement('td');
-    idPurchaseCell.setAttribute('data-id_purchase', item.url);
-    idPurchaseCell.textContent = item.url;
-    row.appendChild(idPurchaseCell);
-
     let nameCompanyCell = document.createElement('td');
     nameCompanyCell.setAttribute('data-name_company', item.name_company);
     nameCompanyCell.textContent = item.name_company;
@@ -92,6 +87,11 @@ function step(item){
     mainNamePurchaseCell.setAttribute('data-main_name_purchase', item.main_name_purchase);
     mainNamePurchaseCell.textContent = item.main_name_purchase;
     row.appendChild(mainNamePurchaseCell);
+
+    let idPurchaseCell = document.createElement('td');
+    idPurchaseCell.setAttribute('data-id_purchase', item.url);
+    idPurchaseCell.textContent = item.url;
+    row.appendChild(idPurchaseCell);
 
     let priceCell = document.createElement('td');
     priceCell.setAttribute('data-price', item.price);
