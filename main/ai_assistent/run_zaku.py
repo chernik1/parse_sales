@@ -3,6 +3,7 @@ from threading import Thread
 import g4f
 from .settings import combined_request
 from .validate import is_validate
+import re
 
 db = []
 
@@ -10,9 +11,9 @@ async def create_tasks(data, new_db_zaku):
     tasks = []
 
     for index, element in enumerate(data):
-        print(element.price, element.main_name_purchase, element.location)
+        print(element.main_name_purchase)
         #promt = combined_request + element.location + ' , ' + element.main_name_purchase + ' , ' + element.price + ""
-        promt = combined_request + element.main_name_purchase + element.name_purchase
+        promt = combined_request + element.main_name_purchase
 
         # if not is_validate(element):
         #     new_db_zaku.append(
@@ -41,7 +42,7 @@ async def run_ai(data):
     new_db_zaku = []
     all_responses = []
 
-    data_50_split = [data[i:i+50] for i in range(0, len(data), 50)]
+    data_50_split = [data[i:i+70] for i in range(0, len(data), 70)]
 
     for data_50 in data_50_split:
         tasks, new_db_zaku = await create_tasks(data_50, new_db_zaku)
@@ -55,12 +56,16 @@ async def run_ai(data):
         s = ''
         for i in response:
             s += i
-        s = s.split()
-        if '**+**' in s or '+' in s:
+
+        pattern_buy = r"\*\*\+\*\*"
+        pattern_not_buy = r"\*\*\-\*\*"
+        pattern_unknown = r"\*\*\A\*\*"
+
+        if re.search(pattern_buy, s):
             forecast = 'Купить'
-        elif '**-**' in s or '-' in s:
+        elif re.search(pattern_not_buy, s):
             forecast = 'Не купить'
-        elif '**A**' in s or 'A' in s:
+        elif re.search(pattern_unknown, s):
             forecast = 'Не знаю'
         else:
             forecast = 'Неопределён'
