@@ -19,18 +19,18 @@ async def check_page(page: Page) -> tuple[Page, list]:
 
     html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
-    a_href_page_find = soup.find(id='fra:auctionList:tbody')
+    a_href_page_find = soup.find(class_="ui-datatable-data ui-widget-content")
     if a_href_page_find is None:
         return (page, [])
     a_href_page_find = a_href_page_find.find_all('a')
 
     if len(a_href_page_find) == 20:
-        element_id = a_href_page_find[18]['id'].replace(':', '\\:').replace('\u0000', '')
+        element_id = a_href_page_find[19]['id'].replace(':', '\\:').replace('\u0000', '')
         await page.wait_for_selector(f'#{element_id}', state='detached')
 
         html_content = await page.content()
         soup = BeautifulSoup(html_content, 'html.parser')
-        tdoby_page_find = soup.find(id='fra:auctionList:tbody')
+        tdoby_page_find = soup.find(class_="ui-datatable-data ui-widget-content")
         if tdoby_page_find is None:
             return (page, [])
 
@@ -129,7 +129,7 @@ async def run() -> list[dict[str, list[any]]]:
     result = []
     async with async_playwright() as playwright:
         for keyword in keywords:
-            browser = await playwright.chromium.launch(headless=True)
+            browser = await playwright.chromium.launch(headless=False)
             context = await browser.new_context()
             page = await context.new_page()
             user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36'
@@ -137,7 +137,7 @@ async def run() -> list[dict[str, list[any]]]:
             await page.set_extra_http_headers({'User-Agent': user_agent})
 
             keyword_dict = {keyword: []}
-            await step(page, keyword)
+            page = await step(page, keyword)
 
             while True:
                 page, a_href_page_find = await check_page(page)
