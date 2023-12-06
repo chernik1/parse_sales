@@ -129,7 +129,7 @@ async def run() -> list[dict[str, list[any]]]:
     result = []
     async with async_playwright() as playwright:
         for keyword in keywords:
-            browser = await playwright.chromium.launch(headless=False)
+            browser = await playwright.chromium.launch(headless=True)
             context = await browser.new_context()
             page = await context.new_page()
             user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36'
