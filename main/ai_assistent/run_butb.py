@@ -10,6 +10,7 @@ db = []
 
 
 async def make_request(prompt):
+    """Функция для выполнения запроса."""
     response = await g4f.ChatCompletion.create_async(
         model=g4f.models.default,
         provider=g4f.Provider.Bing,
@@ -19,6 +20,7 @@ async def make_request(prompt):
     return response
 
 async def create_tasks(data, new_db):
+    """Функция для создания задач."""
     tasks = []
 
     for index, element in enumerate(data):
@@ -48,6 +50,7 @@ async def create_tasks(data, new_db):
 
 
 async def run_ai(data):
+    """Функция работы AI."""
     new_db_butb = []
     all_responses = []
 
@@ -98,6 +101,7 @@ async def run_ai(data):
 
 
 def run_programm(data):
+    """Функция запуска AI."""
     global db
 
     def run_async_code():

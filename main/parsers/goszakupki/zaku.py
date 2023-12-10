@@ -21,6 +21,7 @@ MIN_PRICE_PAGE = 1000
 keywords = settings.Settings().get_keywords()
 
 async def form_main_name_purchase(soup):
+    """Функция для парсинга названия закупки."""
     tr_all_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('tr')
     td_all_name_purchase = soup.find_all('table', class_='table table-striped')[0].find_all('td')
     for index, tr_element in enumerate(tr_all_name_purchase):
@@ -40,7 +41,7 @@ async def form_main_name_purchase(soup):
 
 
 async def parse_url(page, url, keyword):
-    #global list_result
+    """Функция для парсинга ссылок на страницы."""
 
     url = 'https://goszakupki.by' + url
 
@@ -80,7 +81,7 @@ async def parse_url(page, url, keyword):
 
 
 async def parse_page(page, keyword):
-
+    """Функция для парсинга страницы."""
     html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
     a_href_all = soup.select('table > tbody a')
@@ -101,6 +102,7 @@ async def parse_page(page, keyword):
     return page
 
 def get_url_goszakupki(text, from_date, to_date):
+    """Функция для получения ссылки на страницу с результатами поиска."""
     params = {
         'TendersSearch[text]': text,
         'TendersSearch[created_from]': from_date,
@@ -108,15 +110,8 @@ def get_url_goszakupki(text, from_date, to_date):
     }
     return "https://goszakupki.by/tenders/posted?" + urlencode(params)
 
-
-def get_cache():
-    if os.path.exists("cache.txt"):
-        with open("cache.txt", "r") as f:
-            return json.load(f)
-    return collections.defaultdict(lambda: [])
-
-
 async def find_actual_zids(page, url):
+    """Функция для получения списка актуальных заявок."""
     await page.goto(url)
     print(url)
     await page.wait_for_selector("#w0 > table > tbody > tr")
@@ -137,6 +132,7 @@ async def find_actual_zids(page, url):
 
 
 async def watchdog_goszakupki(from_date, to_date):
+    """Функция работы программы."""
     async with async_playwright() as playwright:
         browser = await playwright.chromium.launch(headless=True)
         context = await browser.new_context()
@@ -159,6 +155,7 @@ async def watchdog_goszakupki(from_date, to_date):
         await browser.close()
 
 def run_programm():
+    """Функция запуска парсера."""
     global url_list
     data_was_deleted_urls = ParserZakuDelete.objects.all()
     url_list = [obj.url for obj in data_was_deleted_urls]

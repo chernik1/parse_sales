@@ -16,7 +16,6 @@ list_of_keywords = []
 
 async def check_page(page: Page) -> tuple[Page, list]:
     """Функция проверяет страницу на наличие товаров."""
-
     html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
     a_href_page_find = soup.find(class_="ui-datatable-data ui-widget-content")

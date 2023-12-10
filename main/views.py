@@ -65,7 +65,7 @@ def form_data_butb(request):
 
 @csrf_exempt
 def delete_butb(request):
-    """Функция для удаления записей из таблицы."""
+    """Функция для удаления записей из таблицы BUTB."""
     if request.method == 'POST':
         list_id = request.POST.getlist('id_list[]')
         for id_item in list_id:
@@ -97,6 +97,7 @@ def delete_butb(request):
 
 @csrf_exempt
 def delete_all_butb(request):
+    """Функция для удаления всех записей из таблицы BUTB."""
     if request.method == 'GET':
         parser_all = Parser.objects.all()
         for item in parser_all:
@@ -105,6 +106,7 @@ def delete_all_butb(request):
     return redirect('/')
 
 def index(request):
+    """Функция для отображения главной страницы."""
     parser = Parser.objects.all()
     parser_zaku = ParserZaku.objects.all()
 
@@ -116,6 +118,7 @@ def index(request):
 
 @csrf_exempt
 def complete_butb(request):
+    """Функция для завершения парсинга данных с сайта BUTB."""
     if request.method == 'POST':
         list_id = request.POST.getlist('id_list[]')
         list_id = list(filter(None, list_id))
@@ -148,7 +151,7 @@ def complete_butb(request):
 
 @csrf_exempt
 def form_data_zaku(request):
-
+    """Функция для парсинга данных с сайта zakupki."""
     result = zaku.run_programm()
     parser_zaku_for_json = []
 
@@ -191,6 +194,7 @@ def form_data_zaku(request):
     return JsonResponse(context, safe=False)
 
 def delete_all_zaku(request):
+    """Функция для удаления всех записей из таблицы zakupki."""
     if request.method == 'GET':
         parser_zaku_all = ParserZaku.objects.all()
         for item in parser_zaku_all:
@@ -200,6 +204,7 @@ def delete_all_zaku(request):
 
 @csrf_exempt
 def complete_zaku(request):
+    """Функция для завершения парсинга данных с сайта zakupki."""
     if request.method == 'POST':
         list_id = request.POST.getlist('id_list[]')
         list_id = list(filter(None, list_id))
@@ -231,6 +236,7 @@ def complete_zaku(request):
 
 @csrf_exempt
 def complete_all_zaku(request):
+    """Функция для завершения парсинга данных с сайта zakupki."""
     if request.method == 'GET':
         parser_zaku_all = ParserZaku.objects.all()
         for item in parser_zaku_all:
@@ -241,7 +247,8 @@ def complete_all_zaku(request):
         return JsonResponse('ok', safe=False)
 
 @csrf_exempt
-def ai_start(request):
+def ai_start_zaku(request):
+    """Функция для запуска AI для zakupki."""
     if request.method == 'POST':
         db_zaku = ParserZaku.objects.all()
 
@@ -287,6 +294,7 @@ def ai_start(request):
 
 @csrf_exempt
 def ai_start_butb(request):
+    """Функция для запуска AI для BUTB."""
     if request.method == 'POST':
         db = Parser.objects.all()
 

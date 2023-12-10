@@ -8,6 +8,7 @@ import re
 db = []
 
 async def make_request(promt):
+    """Функция для выполнения запроса."""
     try:
         response = await g4f.ChatCompletion.create_async(
             model=g4f.models.default,
@@ -20,11 +21,11 @@ async def make_request(promt):
     return response
 
 async def create_tasks(data, new_db_zaku):
+    """Функция для создания задач."""
     tasks = []
 
     for index, element in enumerate(data):
         print(element.main_name_purchase)
-        #promt = combined_request + element.location + ' , ' + element.main_name_purchase + ' , ' + element.price + ""
         promt = combined_request + element.main_name_purchase
 
 
@@ -36,6 +37,7 @@ async def create_tasks(data, new_db_zaku):
 
 
 async def run_ai(data):
+    """Функция работы AI."""
     new_db_zaku = []
     all_responses = []
 
@@ -107,6 +109,7 @@ async def run_ai(data):
 
 
 def run_programm(data):
+    """Функция запуска AI."""
     global db
 
     def run_async_code():
