@@ -124,7 +124,7 @@ function step(item){
 
 function completeFunction(id_list){
    $.ajax({
-        url: "/complete/",
+        url: "/complete_butb/",
         type: "POST",
         data: {
             id_list: id_list,
@@ -145,7 +145,7 @@ function completeFunction(id_list){
 
 function deleteFunction(id_list) {
     $.ajax({
-        url: "/delete/",
+        url: "/delete_butb/",
         type: "POST",
         data: {
             id_list: id_list,
@@ -166,7 +166,7 @@ function deleteFunction(id_list) {
 
 function deleteAllFunction() {
     $.ajax({
-        url: "/delete_all/",
+        url: "/delete_all_butb/",
         type: "GET",
         dataType: "json",
         success: function(response) {
@@ -179,7 +179,7 @@ function deleteAllFunction() {
 
 function start() {
     $.ajax({
-        url: '/data/',
+        url: '/data_butb/',
         type: 'POST',
         success: function(response) {
             let table = $('#table').DataTable();

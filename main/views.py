@@ -7,11 +7,12 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
 import uuid
 
-#убрать баг в выводе 1 таблицы, ссылка после предмета, рег номер после предмета.
+
 # Create your views here.
 
 @csrf_exempt
-def form_data(request):
+def form_data_butb(request):
+    """Функция для парсинга данных с сайта BUTB и вывода их в таблицу."""
     parser_for_json = []
 
     result = butb.run_programm()
@@ -63,7 +64,8 @@ def form_data(request):
     return JsonResponse(context, safe=False)
 
 @csrf_exempt
-def delete(request):
+def delete_butb(request):
+    """Функция для удаления записей из таблицы."""
     if request.method == 'POST':
         list_id = request.POST.getlist('id_list[]')
         for id_item in list_id:
@@ -94,7 +96,7 @@ def delete(request):
     redirect('/')
 
 @csrf_exempt
-def delete_all(request):
+def delete_all_butb(request):
     if request.method == 'GET':
         parser_all = Parser.objects.all()
         for item in parser_all:
@@ -113,7 +115,7 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 @csrf_exempt
-def complete(request):
+def complete_butb(request):
     if request.method == 'POST':
         list_id = request.POST.getlist('id_list[]')
         list_id = list(filter(None, list_id))
