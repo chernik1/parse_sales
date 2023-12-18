@@ -54,7 +54,7 @@ async def run_ai(data):
     new_db_butb = []
     all_responses = []
 
-    data_50_split = [data[i:i+50] for i in range(0, len(data), 50)]
+    data_50_split = [data[i:i+10] for i in range(0, len(data), 10)]
 
     for data_50 in data_50_split:
         tasks, new_db_zaku = await create_tasks(data_50, new_db_butb)
