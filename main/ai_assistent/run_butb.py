@@ -7,8 +7,6 @@ import re
 
 db = []
 
-
-
 async def make_request(prompt):
     """Функция для выполнения запроса."""
     response = await g4f.ChatCompletion.create_async(
