@@ -110,8 +110,8 @@ async def step(page: Page, keyword: str) -> Page:
 
     await page.goto("https://zakupki.butb.by/auctions/reestrauctions.html")
     await page.get_by_role("link", name="Раскрыть форму поиска").click()
-    await page.locator("input[name=\"fra\\:j_idt175\"]").click()
-    await page.locator("input[name=\"fra\\:j_idt175\"]").fill(keyword)
+    await page.locator("input[name=\"fra\\:j_idt181\"]").click()
+    await page.locator("input[name=\"fra\\:j_idt181\"]").fill(keyword)
     await page.locator("input[name=\"fra\\:date1\"]").click()
     await page.locator("input[name=\"fra\\:date1\"]").fill(yesterday)
     await page.locator("input[name=\"fra\\:date2\"]").click()
