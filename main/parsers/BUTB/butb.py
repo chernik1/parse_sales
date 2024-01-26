@@ -107,11 +107,14 @@ async def parse_a_href(page: Page) -> tuple[Page, list]:
 
 async def step(page: Page, keyword: str) -> Page:
     """Функция перехода на страницу предметов."""
-
     await page.goto("https://zakupki.butb.by/auctions/reestrauctions.html")
     await page.get_by_role("link", name="Раскрыть форму поиска").click()
-    await page.locator("input[name=\"fra\\:j_idt181\"]").click()
-    await page.locator("input[name=\"fra\\:j_idt181\"]").fill(keyword)
+    await page.wait_for_selector('text="УНП заказчика (организатора)"', state='attached')
+    html_content = await page.content()
+    soup = BeautifulSoup(html_content, 'html.parser')
+    input_id = soup.find(lambda tag: tag.name == 'span' and tag.text == 'Предмет закупки').find_parent('tr').find_all('input')[0].attrs
+    await page.locator(f"input[name='{input_id['name']}']").click()
+    await page.locator(f"input[name='{input_id['name']}']").fill(keyword)
     await page.locator("input[name=\"fra\\:date1\"]").click()
     await page.locator("input[name=\"fra\\:date1\"]").fill(yesterday)
     await page.locator("input[name=\"fra\\:date2\"]").click()
