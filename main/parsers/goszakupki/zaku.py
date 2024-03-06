@@ -50,6 +50,9 @@ async def parse_url(page, url, keyword):
     html_content = await page.content()
     soup = BeautifulSoup(html_content, 'html.parser')
 
+    if not soup.find(class_='site-error') is None:
+        return page
+
     name_company = soup.find(text='Наименование организации').find_parent('tr').find_all('td')[0].text
     payer_number = soup.find(text='УНП организации').find_parent('tr').find_all('td')[0].text
 
