@@ -1,31 +1,39 @@
-import asyncio
-import replicate
-import time
+import torch
+import transformers
 
-async def run_model(prompt, system_prompt):
-    output = replicate.run(
-        "meta/llama-2-70b-chat:02e509c789964a7ea8736978a43525956ef40397be9033abf9fd2badfe68c9e3",
-        input={
-            "prompt": prompt,
-            "system_prompt": system_prompt,
-        }
-    )
+from transformers import LlamaForCausalLM, LlamaTokenizer
 
-    loop = asyncio.get_running_loop()
-    iterator = await loop.run_in_executor(None, lambda: iter(output))
+model_dir = "./llama-2-7b-chat-hf"
+model = LlamaForCausalLM.from_pretrained(model_dir)
 
-    for item in iterator:
-        print(item, end="")
+tokenizer = LlamaTokenizer.from_pretrained(model_dir)
 
-async def main():
-    # Задаём 10 разных запросов
-    tasks = [
-        run_model(f"привет {i}", "Отвечай только нет нет нет")
-        for i in range(50)
-    ]
-    await asyncio.gather(*tasks)
-time_start = time.time()
-# Запускаем асинхронную функцию main
-asyncio.run(main())
-time_end = time.time()
-print(time_end - time_start)
+pipeline = transformers.pipeline(
+"text-generation",
+
+model=model,
+
+tokenizer=tokenizer,
+
+torch_dtype=torch.float16,
+
+device_map="auto",
+)
+
+sequences = pipeline(
+'I have tomatoes, basil and cheese at home. What can I cook for dinner?\n',
+
+do_sample=True,
+
+top_k=10,
+
+num_return_sequences=1,
+
+eos_token_id=tokenizer.eos_token_id,
+
+max_length=400,
+
+)
+
+for seq in sequences:
+    print(seq)

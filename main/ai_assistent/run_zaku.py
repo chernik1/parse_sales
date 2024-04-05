@@ -5,6 +5,8 @@ from .settings import SYSTEM_PROMT
 from .validate import is_validate
 import re
 
+db = []
+
 async def run_model(prompt, system_prompt):
     output = replicate.run(
         "meta/llama-2-70b-chat:02e509c789964a7ea8736978a43525956ef40397be9033abf9fd2badfe68c9e3",
@@ -54,9 +56,30 @@ async def run_ai(data):
         tasks.append(task)
 
     responses = await asyncio.gather(*tasks)
-    # Not , But , Yes
+
     for response in responses:
-        pass
+        if re.search(r'Not', response, re.IGNORECASE):
+            forecast = 'Не купить'
+        elif re.search(r'Buy', response, re.IGNORECASE):
+            forecast = 'Купить'
+        elif re.search(r'Yes', response, re.IGNORECASE):
+            forecast = 'Купить'
+        else:
+            forecast = 'Неопределён'
+
+        new_db_zaku.append(
+            {
+                'keyword': element.keyword,
+                'url': element.url,
+                'name_company': element.name_company,
+                'payer_number': element.payer_number,
+                'main_name_purchase': element.main_name_purchase,
+                'name_purchase': element.name_purchase,
+                'price': element.price,
+                'location': element.location,
+                'forecast': forecast,
+            }
+        )
 
     return new_db_zaku
 
