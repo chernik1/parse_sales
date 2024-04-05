@@ -1,40 +1,25 @@
 import asyncio
+import replicate
 from threading import Thread
-import g4f
-from .settings import combined_request
+from .settings import SYSTEM_PROMT
 from .validate import is_validate
 import re
 
-db = []
+async def run_model(prompt, system_prompt):
+    output = replicate.run(
+        "meta/llama-2-70b-chat:02e509c789964a7ea8736978a43525956ef40397be9033abf9fd2badfe68c9e3",
+        input={
+            "prompt": prompt,
+            "system_prompt": system_prompt,
+        }
+    )
 
-async def make_request(promt):
-    """Функция для выполнения запроса."""
-    try:
-        response = await g4f.ChatCompletion.create_async(
-            model=g4f.models.default,
-            provider=g4f.Provider.Bing,
-            messages=[{"role": "user", "content": promt}],
-        )
-    except Exception as e:
-        print(e)
-        response = ['None']
-    return response
-
-async def create_tasks(data, new_db_zaku):
-    """Функция для создания задач."""
-    tasks = []
-
-    for index, element in enumerate(data):
-        print(element.main_name_purchase)
-        promt = combined_request + element.main_name_purchase
-
-
-        print(promt)
-        task = asyncio.create_task(make_request(promt))
-        tasks.append(task)
-
-    return tasks, new_db_zaku
-
+    loop = asyncio.get_running_loop()
+    iterator = await loop.run_in_executor(None, lambda: iter(output))
+    answer = ''
+    for item in iterator:
+        answer += item
+    return answer
 
 async def run_ai(data):
     """Функция работы AI."""
@@ -61,51 +46,19 @@ async def run_ai(data):
         else:
             validate_data.append(element)
 
-    data_50_split = [validate_data[i:i+50] for i in range(0, len(validate_data), 50)]
+    tasks = []
 
-    for data_50 in data_50_split:
-        tasks, new_db_zaku = await create_tasks(data_50, new_db_zaku)
-        responses = await asyncio.gather(*tasks)
-        all_responses.append(responses)
+    for element in validate_data:
+        prompt = ','.join([element.main_name_purchase, element.price, element.location])
+        task = asyncio.create_task(run_model(prompt, SYSTEM_PROMT))
+        tasks.append(task)
 
-    all_responses = [item for sublist in all_responses for item in sublist]
-
-    for index, response in enumerate(all_responses):
-        element = data[index]
-        s = ''
-        for i in response:
-            s += i
-
-        pattern_buy = r"\*\*\+\*\*"
-        pattern_not_buy = r"\*\*\-\*\*"
-        pattern_unknown = r"\*\*\A\*\*"
-
-        if re.search(pattern_buy, s):
-            forecast = 'Купить'
-        elif re.search(pattern_not_buy, s):
-            forecast = 'Не купить'
-        elif re.search(pattern_unknown, s):
-            forecast = 'Не знаю'
-        else:
-            forecast = 'Неопределён'
-        print(s)
-
-        new_db_zaku.append(
-            {
-                'keyword': element.keyword,
-                'url': element.url,
-                'name_company': element.name_company,
-                'payer_number': element.payer_number,
-                'main_name_purchase': element.main_name_purchase,
-                'name_purchase': element.name_purchase,
-                'price': element.price,
-                'location': element.location,
-                'forecast': forecast,
-            }
-        )
+    responses = await asyncio.gather(*tasks)
+    # Not , But , Yes
+    for response in responses:
+        pass
 
     return new_db_zaku
-
 
 
 def run_programm(data):

@@ -292,48 +292,51 @@ def ai_start_zaku(request):
 
     return JsonResponse(context, safe=False)
 
-@csrf_exempt
+# @csrf_exempt
+# def ai_start_butb(request):
+#     """Функция для запуска AI для BUTB."""
+#     if request.method == 'POST':
+#         db = Parser.objects.all()
+#
+#         from main.ai_assistent.run_butb import run_programm
+#
+#         new_db = run_programm(db)
+#
+#         parser = []
+#
+#         for element in new_db:
+#             if Parser.objects.filter(id_purchase=element['id_purchase']).exists():
+#                 Parser.objects.filter(id_purchase=element['id_purchase']).delete()
+#
+#                 Parser.objects.create(
+#                     keyword=element['keyword'],
+#                     id_purchase=element['id_purchase'],
+#                     name_company=element['name_company'],
+#                     payer_number=element['payer_number'],
+#                     date=element['date'],
+#                     name_purchase=element['name_purchase'],
+#                     price=element['price'],
+#                     location=element['location'],
+#                     forecast=element['forecast'],
+#                 )
+#
+#                 parser.append({
+#                     'keyword': element['keyword'],
+#                     'id_purchase': element['id_purchase'],
+#                     'name_company': element['name_company'],
+#                     'payer_number': element['payer_number'],
+#                     'date': element['date'],
+#                     'name_purchase': element['name_purchase'],
+#                     'price': element['price'],
+#                     'location': element['location'],
+#                     'forecast': element['forecast'],
+#                 })
+#
+#         context = {
+#             'parser': parser,
+#         }
+#
+#         return JsonResponse(context, safe=False)
+
 def ai_start_butb(request):
-    """Функция для запуска AI для BUTB."""
-    if request.method == 'POST':
-        db = Parser.objects.all()
-
-        from main.ai_assistent.run_butb import run_programm
-
-        new_db = run_programm(db)
-
-        parser = []
-
-        for element in new_db:
-            if Parser.objects.filter(id_purchase=element['id_purchase']).exists():
-                Parser.objects.filter(id_purchase=element['id_purchase']).delete()
-
-                Parser.objects.create(
-                    keyword=element['keyword'],
-                    id_purchase=element['id_purchase'],
-                    name_company=element['name_company'],
-                    payer_number=element['payer_number'],
-                    date=element['date'],
-                    name_purchase=element['name_purchase'],
-                    price=element['price'],
-                    location=element['location'],
-                    forecast=element['forecast'],
-                )
-
-                parser.append({
-                    'keyword': element['keyword'],
-                    'id_purchase': element['id_purchase'],
-                    'name_company': element['name_company'],
-                    'payer_number': element['payer_number'],
-                    'date': element['date'],
-                    'name_purchase': element['name_purchase'],
-                    'price': element['price'],
-                    'location': element['location'],
-                    'forecast': element['forecast'],
-                })
-
-        context = {
-            'parser': parser,
-        }
-
-        return JsonResponse(context, safe=False)
+    pass
