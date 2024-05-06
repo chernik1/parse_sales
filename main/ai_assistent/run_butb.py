@@ -1,39 +1,9 @@
-import torch
-import transformers
+import time
 
-from transformers import LlamaForCausalLM, LlamaTokenizer
+time_start = time.time()
 
-model_dir = "./llama-2-7b-chat-hf"
-model = LlamaForCausalLM.from_pretrained(model_dir)
+for i in range(1000000):
+    print(i)
 
-tokenizer = LlamaTokenizer.from_pretrained(model_dir)
-
-pipeline = transformers.pipeline(
-"text-generation",
-
-model=model,
-
-tokenizer=tokenizer,
-
-torch_dtype=torch.float16,
-
-device_map="auto",
-)
-
-sequences = pipeline(
-'I have tomatoes, basil and cheese at home. What can I cook for dinner?\n',
-
-do_sample=True,
-
-top_k=10,
-
-num_return_sequences=1,
-
-eos_token_id=tokenizer.eos_token_id,
-
-max_length=400,
-
-)
-
-for seq in sequences:
-    print(seq)
+time_end = time.time()
+print(time_end - time_start)

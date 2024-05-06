@@ -58,8 +58,10 @@ async def parse_url(page, url, keyword):
 
     main_name_purchase, soup = await form_main_name_purchase(soup)
 
-
-    price = soup.find(string='Общая ориентировочная стоимость закупки').find_parent('tr').find_all('td')[0].text
+    if 'Общая ориентировочная стоимость закупки' not in soup.text:
+        price = soup.find(string='Общая предельная стоимость закупки').find_parent('tr').find_all('td')[0].text
+    else:
+        price = soup.find(string='Общая ориентировочная стоимость закупки').find_parent('tr').find_all('td')[0].text
     location = soup.find(string='Место нахождения организации').find_parent('tr').find_all('td')[0].text
 
     list_purchase = []
