@@ -94,6 +94,8 @@ async def parse_page(page, keyword):
 
     for a_href, tr in zip(a_href_all, tr_all):
         price = tr.select('td')[5].text.replace(' ', '').replace('\xa0', '').replace('BYN', '')
+        if price == '-':
+            price = 0
         if float(price) < MIN_PRICE_PAGE:
             continue
 
@@ -130,6 +132,8 @@ async def find_actual_zids(page, url):
             return [], {}
         price_obj = await i.query_selector("td:nth-child(6)")
         price_str = await price_obj.text_content()
+        if price_str == '-':
+            price_str = '0 BYN'
         price = float("".join([s for s in price_str.split() if not s.isalpha()]))
         prices[zid] = price
         actual_zids.append(zid)
