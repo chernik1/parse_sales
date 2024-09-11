@@ -146,7 +146,7 @@ async def find_actual_zids(page, url):
 async def watchdog_goszakupki(from_date, to_date):
     """Функция работы программы."""
     async with async_playwright() as playwright:
-        browser = await playwright.chromium.launch(headless=False)
+        browser = await playwright.chromium.launch(headless=True)
         context = await browser.new_context()
         page = await context.new_page()
         user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36'
