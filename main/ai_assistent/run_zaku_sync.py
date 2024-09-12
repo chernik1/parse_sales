@@ -15,7 +15,7 @@ def make_request(prompt):
     try:
         response = g4f.ChatCompletion.create(
             model=g4f.models.default,
-            provider=g4f.Provider.FreeGpt,
+            provider=g4f.Provider.,
             messages=[{"role": "user", "content": prompt}],
         )
     except Exception as e:
