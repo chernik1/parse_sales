@@ -12,7 +12,7 @@ async def make_request(promt):
     try:
         response = await g4f.ChatCompletion.create_async(
             model=g4f.models.default,
-            provider=g4f.Provider.Bing,
+            provider=g4f.Provider.DDG,
             messages=[{"role": "user", "content": promt}],
         )
     except Exception as e:
@@ -61,10 +61,10 @@ async def run_ai(data):
         else:
             validate_data.append(element)
 
-    data_50_split = [validate_data[i:i+50] for i in range(0, len(validate_data), 50)]
+    data_10_split = [validate_data[i:i+10] for i in range(0, len(validate_data), 10)]
 
-    for data_50 in data_50_split:
-        tasks, new_db_zaku = await create_tasks(data_50, new_db_zaku)
+    for data_10 in data_10_split:
+        tasks, new_db_zaku = await create_tasks(data_10, new_db_zaku)
         responses = await asyncio.gather(*tasks)
         all_responses.append(responses)
 

@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Parser, ParserDelete, ParserZaku, ParserZakuDelete
 import uuid
+from .ai_assistent.run_zaku_sync import run_programm
 
 
 # Create your views here.
@@ -251,9 +252,6 @@ def ai_start_zaku(request):
     """Функция для запуска AI для zakupki."""
     if request.method == 'POST':
         db_zaku = ParserZaku.objects.all()
-
-        from main.ai_assistent.run_zaku import run_programm
-
         new_db_zaku = run_programm(db_zaku)
 
         parser_zaku = []
